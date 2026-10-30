@@ -1,0 +1,943 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>WEZIP 프로토타입</title>
+<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-status" viewBox="0 0 67 12"><path opacity="0.35" d="M44.9951 0.503906H61.6611C62.8577 0.503906 63.8281 1.47428 63.8281 2.6709V8.6709C63.828 9.86737 62.8576 10.8369 61.6611 10.8369H44.9951C43.7986 10.8369 42.8283 9.86737 42.8281 8.6709V2.6709L42.8389 2.44922C42.9497 1.35656 43.8732 0.503906 44.9951 0.503906Z" stroke="#111111" fill="none"/><path opacity="0.4" d="M65.3281 3.67188V7.67188C66.1329 7.3331 66.6562 6.54501 66.6562 5.67188C66.6562 4.79874 66.1329 4.01065 65.3281 3.67188Z" fill="#111111"/><path d="M44.3281 3.10391C44.3281 2.49639 44.8206 2.00391 45.4281 2.00391H61.2281C61.8356 2.00391 62.3281 2.49639 62.3281 3.10391V8.23724C62.3281 8.84475 61.8356 9.33724 61.2281 9.33724H45.4281C44.8206 9.33724 44.3281 8.84475 44.3281 8.23724V3.10391Z" fill="#111111"/><path fill-rule="evenodd" clip-rule="evenodd" d="M29.6679 2.27733C31.8837 2.27742 34.0149 3.12886 35.6209 4.65566C35.7418 4.77354 35.9351 4.77205 36.0542 4.65233L37.2102 3.48566C37.2705 3.42494 37.3041 3.34269 37.3036 3.25711C37.3031 3.17153 37.2685 3.08967 37.2075 3.02966C32.9924 -1.00989 26.3426 -1.00989 22.1275 3.02966C22.0665 3.08963 22.0318 3.17146 22.0313 3.25704C22.0307 3.34262 22.0643 3.42489 22.1245 3.48566L23.2809 4.65233C23.3999 4.77223 23.5933 4.77372 23.7142 4.65566C25.3203 3.12876 27.4517 2.27732 29.6679 2.27733ZM29.6679 6.07299C30.8853 6.07292 32.0594 6.52545 32.9619 7.34266C33.0839 7.45864 33.2762 7.45613 33.3952 7.33699L34.5499 6.17033C34.6107 6.10913 34.6444 6.02612 34.6435 5.93985C34.6426 5.85359 34.6072 5.77127 34.5452 5.71133C31.797 3.15494 27.5411 3.15494 24.7929 5.71133C24.7308 5.77127 24.6954 5.85363 24.6945 5.93992C24.6937 6.02621 24.7276 6.10922 24.7885 6.17033L25.9429 7.33699C26.0618 7.45613 26.2541 7.45864 26.3762 7.34266C27.2781 6.52599 28.4512 6.0735 29.6679 6.07299ZM31.9809 8.62681C31.9826 8.71332 31.9486 8.79672 31.8869 8.85733L29.8895 10.873C29.831 10.9322 29.7511 10.9656 29.6679 10.9656C29.5846 10.9656 29.5047 10.9322 29.4462 10.873L27.4485 8.85733C27.3868 8.79668 27.3529 8.71325 27.3547 8.62674C27.3565 8.54023 27.394 8.45831 27.4582 8.40033C28.7338 7.32144 30.602 7.32144 31.8775 8.40033C31.9417 8.45836 31.9791 8.54031 31.9809 8.62681Z" fill="#111111"/><path fill-rule="evenodd" clip-rule="evenodd" d="M16 0.335938H15C14.4477 0.335938 14 0.783653 14 1.33594V10.0026C14 10.5549 14.4477 11.0026 15 11.0026H16C16.5523 11.0026 17 10.5549 17 10.0026V1.33594C17 0.783653 16.5523 0.335938 16 0.335938ZM10.3333 2.66927H11.3333C11.8856 2.66927 12.3333 3.11699 12.3333 3.66927V10.0026C12.3333 10.5549 11.8856 11.0026 11.3333 11.0026H10.3333C9.78105 11.0026 9.33333 10.5549 9.33333 10.0026V3.66927C9.33333 3.11699 9.78105 2.66927 10.3333 2.66927ZM6.66667 5.0026H5.66667C5.11438 5.0026 4.66667 5.45032 4.66667 6.0026V10.0026C4.66667 10.5549 5.11438 11.0026 5.66667 11.0026H6.66667C7.21895 11.0026 7.66667 10.5549 7.66667 10.0026V6.0026C7.66667 5.45032 7.21895 5.0026 6.66667 5.0026ZM2 7.0026H1C0.447715 7.0026 0 7.45032 0 8.0026V10.0026C0 10.5549 0.447715 11.0026 1 11.0026H2C2.55228 11.0026 3 10.5549 3 10.0026V8.0026C3 7.45032 2.55228 7.0026 2 7.0026Z" fill="#111111"/></symbol>
+    <symbol id="i-more" viewBox="0 0 34 34"><circle cx="16.9219" cy="23.8516" r="2" fill="#121212"/><circle cx="16.9219" cy="16.8516" r="2" fill="#121212"/><circle cx="16.9219" cy="9.85156" r="2" fill="#121212"/></symbol>
+    <symbol id="i-home" viewBox="0 0 34 34"><path d="M9 24.8286V15.0571C9 14.7133 9.07544 14.3876 9.22631 14.08C9.37719 13.7724 9.58508 13.519 9.85 13.32L16.225 8.43429C16.5969 8.14476 17.0219 8 17.5 8C17.9781 8 18.4031 8.14476 18.775 8.43429L25.15 13.32C25.4156 13.519 25.6239 13.7724 25.7747 14.08C25.9256 14.3876 26.0007 14.7133 26 15.0571V24.8286C26 25.4257 25.7917 25.9371 25.3752 26.3627C24.9587 26.7883 24.4587 27.0007 23.875 27H20.6875C20.3865 27 20.1343 26.8958 19.931 26.6873C19.7277 26.4789 19.6257 26.2212 19.625 25.9143V20.4857C19.625 20.1781 19.523 19.9204 19.319 19.7127C19.115 19.5049 18.8628 19.4007 18.5625 19.4H16.4375C16.1365 19.4 15.8843 19.5042 15.681 19.7127C15.4777 19.9211 15.3757 20.1788 15.375 20.4857V25.9143C15.375 26.2219 15.273 26.4799 15.069 26.6884C14.865 26.8969 14.6128 27.0007 14.3125 27H11.125C10.5406 27 10.0405 26.7876 9.62475 26.3627C9.20896 25.9378 9.00071 25.4264 9 24.8286Z" fill="#121212"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 34 34"><path d="M17 9C14.8783 9 12.8431 9.84248 11.3428 11.3428C9.84248 12.8431 9 14.8783 9 17V21.5C9 22.2124 9.00075 22.6968 9.02637 23.0732C9.04516 23.3491 9.07499 23.5261 9.1123 23.6533L9.15234 23.7656C9.25285 24.0082 9.40026 24.2284 9.58594 24.4141C9.72517 24.5533 9.88364 24.6711 10.0566 24.7637L10.2344 24.8477C10.3678 24.9028 10.5592 24.9486 10.9268 24.9736C11.3032 24.9993 11.7876 25 12.5 25H17C19.1217 25 21.1569 24.1575 22.6572 22.6572C24.1575 21.1569 25 19.1217 25 17C25 14.8783 24.1575 12.8431 22.6572 11.3428C21.1569 9.84248 19.1217 9 17 9Z" stroke="#121212" stroke-width="2" fill="none"/><path d="M20.7071 15.2929C20.8946 15.4804 21 15.7348 21 16C21 16.2652 20.8946 16.5196 20.7071 16.7071C20.5196 16.8946 20.2652 17 20 17H14C13.7348 17 13.4804 16.8946 13.2929 16.7071C13.1054 16.5196 13 16.2652 13 16C13 15.7348 13.1054 15.4804 13.2929 15.2929C13.4804 15.1054 13.7348 15 14 15H20C20.2652 15 20.5196 15.1054 20.7071 15.2929Z" fill="#121212"/><path d="M17.7071 19.2929C17.8946 19.4804 18 19.7348 18 20C18 20.2652 17.8946 20.5196 17.7071 20.7071C17.5196 20.8946 17.2652 21 17 21H14C13.7348 21 13.4804 20.8946 13.2929 20.7071C13.1054 20.5196 13 20.2652 13 20C13 19.7348 13.1054 19.4804 13.2929 19.2929C13.4804 19.1054 13.7348 19 14 19H17C17.2652 19 17.5196 19.1054 17.7071 19.2929Z" fill="#121212"/></symbol>
+    <symbol id="i-search34" viewBox="0 0 34 34"><circle cx="16" cy="16" r="7" stroke="#121212" stroke-width="2" fill="none"/><path d="M24.7929 26.7071C25.1834 27.0976 25.8166 27.0976 26.2071 26.7071C26.5976 26.3166 26.5976 25.6834 26.2071 25.2929L25.5 26L24.7929 26.7071ZM20.5 21L19.7929 21.7071L24.7929 26.7071L25.5 26L26.2071 25.2929L21.2071 20.2929L20.5 21Z" fill="#121212"/></symbol>
+    <symbol id="i-profile" viewBox="0 0 34 34"><path d="M19.6074 11.6748C19.6074 10.1977 18.4097 9.0001 16.9326 9C15.4555 9 14.2578 10.1977 14.2578 11.6748C14.2579 13.1519 15.4555 14.3496 16.9326 14.3496V16.3496L16.6914 16.3428C14.3013 16.2214 12.3848 14.3052 12.2637 11.915L12.2578 11.6748C12.2578 9.09309 14.3509 7 16.9326 7L17.1729 7.00586C19.6428 7.13099 21.6074 9.17372 21.6074 11.6748L21.6006 11.915C21.4754 14.385 19.4336 16.3495 16.9326 16.3496V14.3496C18.4096 14.3495 19.6073 13.1518 19.6074 11.6748Z" fill="#121212"/><path d="M17.0918 17.6016C21.5288 17.6017 25.2377 20.7194 26.1465 24.8838C26.3819 25.9629 25.4639 26.8691 24.3594 26.8691H9.82425C8.71975 26.8691 7.80169 25.9629 8.03715 24.8838C8.94601 20.7193 12.6548 17.6016 17.0918 17.6016ZM16.7647 19.6084C13.959 19.7316 11.5657 21.4472 10.4668 23.874C10.2477 24.3582 10.6307 24.8691 11.1621 24.8691H23.0157C23.5471 24.8691 23.9302 24.3582 23.711 23.874C22.57 21.3544 20.0334 19.6016 17.0889 19.6016L16.7647 19.6084Z" fill="#121212"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 29 29"><line x1="14.8609" y1="4.7125" x2="14.8609" y2="24.2875" stroke="#121212" stroke-width="2.175" stroke-linecap="round"/><line x1="4.7125" y1="14.1391" x2="24.2875" y2="14.1391" stroke="#121212" stroke-width="2.175" stroke-linecap="round"/></symbol>
+    <symbol id="i-back" viewBox="0 0 44 44"><path fill-rule="evenodd" clip-rule="evenodd" d="M19.5449 22.5L27 30.4169L25.5092 32L17.3087 23.2916C17.111 23.0816 17 22.7969 17 22.5C17 22.2031 17.111 21.9184 17.3087 21.7084L25.5092 13L27 14.5831L19.5449 22.5Z" fill="#000"/></symbol>
+    <symbol id="i-search34b" viewBox="0 0 34 34"><circle cx="16" cy="16" r="7" stroke="#121212" stroke-width="2.8" fill="none"/><path d="M21 21l5 5" stroke="#121212" stroke-width="2.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 10.667 9.787"><path d="M5.3333 9.7867L4.56 9.0827C1.8133 6.592 0 4.944 0 2.9333C0 1.2853 1.2907 0 2.9333 0C3.8613 0 4.752 0.432 5.3333 1.1093C5.9147 0.432 6.8053 0 7.7333 0C9.376 0 10.6667 1.2853 10.6667 2.9333C10.6667 4.944 8.8533 6.592 6.1067 9.0827L5.3333 9.7867Z" fill="#FF5C57"/></symbol>
+    <symbol id="i-comment" viewBox="-0.6 -0.6 17.223 17.201"><path fill-rule="evenodd" d="M8.0226 0C6.972 0 5.9317 0.2069 4.9611 0.609C3.9905 1.011 3.1086 1.6003 2.3657 2.3431C0.8654 3.8434 0.0225 5.8783 0.0225 8C0.0162 9.8472 0.6558 11.6385 1.8305 13.064L0.2305 14.664C0.1195 14.7765 0.0443 14.9194 0.0144 15.0745C-0.0155 15.2297 0.0013 15.3903 0.0625 15.536C0.129 15.6799 0.2367 15.8009 0.372 15.8835C0.5073 15.9661 0.6641 16.0067 0.8225 16H8.0226C10.1443 16 12.1791 15.1571 13.6794 13.6569C15.1797 12.1566 16.0226 10.1217 16.0226 8C16.0226 5.8783 15.1797 3.8434 13.6794 2.3431C12.1791 0.8429 10.1443 0 8.0226 0ZM8.0226 14.4H2.7505L3.4945 13.656C3.6436 13.5061 3.7272 13.3033 3.7272 13.092C3.7272 12.8807 3.6436 12.6779 3.4945 12.528C2.447 11.4816 1.7947 10.1044 1.6487 8.631C1.5027 7.1576 1.8721 5.6792 2.6939 4.4476C3.5158 3.216 4.7392 2.3075 6.1558 1.8768C7.5723 1.4461 9.0944 1.5198 10.4627 2.0855C11.831 2.6512 12.9608 3.6738 13.6597 4.9791C14.3586 6.2844 14.5832 7.7916 14.2955 9.244C14.0077 10.6964 13.2252 12.004 12.0814 12.9442C10.9376 13.8843 9.5032 14.3988 8.0226 14.4Z" fill="#000"/></symbol>
+    <symbol id="i-person" viewBox="0 0 24 24"><circle cx="12" cy="9" r="4" fill="#fff"/><path d="M4.5 20c.9-3.6 4-5.5 7.5-5.5s6.6 1.9 7.5 5.5" fill="#fff"/></symbol>
+    <symbol id="i-search24" viewBox="0 0 24 24"><path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M20.9984 20.9984L16.6484 16.6484" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-knock" viewBox="0 0 37 37"><path d="M15.5244 9.1824C16.4033 8.82621 17.4012 9.24851 17.7574 10.1274L19.916 15.3458L16.7381 16.6337L14.5794 11.4153C14.2233 10.5364 14.6456 9.53858 15.5244 9.1824ZM10.3613 14.5931C10.0051 13.7142 10.4274 12.7164 11.3063 12.3602C12.1852 12.004 13.183 12.4263 13.5392 13.3052L15.1491 17.2776L11.9712 18.5655L10.3613 14.5931ZM19.8951 10.7294C19.5389 9.85052 19.9612 8.85269 20.8401 8.4965C21.719 8.14032 22.7168 8.56262 23.073 9.44151L25.0048 14.2084C25.361 15.0873 24.9387 16.0851 24.0598 16.4413C23.1809 16.7975 22.1831 16.3752 21.8269 15.4963L19.8951 10.7294ZM25.9498 11.9755C25.5937 11.0966 26.016 10.0988 26.8948 9.74256C27.7737 9.38638 28.7716 9.80868 29.1278 10.6876L30.4157 13.8655C30.7718 14.7444 30.3495 15.7422 29.4707 16.0984C28.5918 16.4546 27.5939 16.0323 27.2377 15.1534L25.9498 11.9755ZM22.9538 18.277L22.9418 18.2472C23.5172 18.3262 24.1228 18.2657 24.7038 18.0303C25.3592 17.7646 25.8845 17.3205 26.2542 16.7776C27.1872 17.8389 28.7292 18.2488 30.1146 17.6874C30.6956 17.4519 31.1744 17.0786 31.5305 16.6164L31.7036 17.0434C32.756 19.6404 32.4454 22.4544 31.1015 24.6871L33.0333 29.454C33.3895 30.3329 32.9672 31.3307 32.0883 31.6869L24.1435 34.9067C23.2646 35.2629 22.2668 34.8406 21.9106 33.9617L20.3329 30.0687C19.3149 30.0246 18.3061 29.8033 17.3501 29.3987L16.5407 29.0562C14.866 28.3474 13.5396 27.0003 12.8574 25.317L12.3141 23.9764C11.6037 22.2235 12.4513 20.2209 14.2041 19.5105L18.5737 17.7397C19.6711 17.2949 20.9201 17.8235 21.3649 18.9209C21.8096 20.0183 21.281 21.2673 20.1836 21.7121L17.4029 22.839C16.966 23.0161 16.7533 23.5185 16.9304 23.9554C17.1075 24.3924 17.6099 24.605 18.0469 24.4279L20.8276 23.301C22.8038 22.5001 23.7547 20.2532 22.9538 18.277Z" fill="#121212"/><line x1="6.65643" y1="15.8405" x2="3.52096" y2="16.75" stroke="#121212" stroke-width="2.17647" stroke-linecap="round"/><line x1="6.29122" y1="11.0876" x2="3.39159" y2="9.58742" stroke="#121212" stroke-width="2.17647" stroke-linecap="round"/><line x1="9.43169" y1="8.06162" x2="8.02391" y2="5.11603" stroke="#121212" stroke-width="2.17647" stroke-linecap="round"/></symbol>
+    <symbol id="i-sheet" viewBox="0 0 335 9"><path d="M1.5 1.5L333.5 1.5" stroke="#121212" stroke-width="3" stroke-linecap="round"/><path d="M168.956 8.02393L153.88 2.77393L184.032 2.77393L168.956 8.02393Z" fill="#121212"/></symbol>
+  </defs>
+</svg>
+
+<div id="stage">
+  <section class="screen scroll" id="s-q1"></section>
+  <section class="screen scroll" id="s-q2"></section>
+  <section class="screen scroll" id="s-m1"></section>
+
+  <!-- ================= HOME (Figma 1:483) ================= -->
+  <section class="screen app" id="s-home" aria-label="홈">
+    <div class="z">
+      <div class="fill scroll" id="home-scroll">
+        <div class="a" id="h-page" style="left:0;top:0;width:390px;height:1476px;background:var(--app-bg)">
+
+          <!-- category tabs -->
+          <div class="a" style="left:0;top:46px;width:390px;height:52px;box-sizing:border-box;padding:0 16px;display:flex;align-items:center;justify-content:space-between">
+            <div data-z="카테고리 탭" class="tabs23" style="line-height:1.5"><span>수집/빈티지</span><span style="color:#C4C4C4">다꾸</span><span>반려동물</span></div>
+            <svg data-z="카테고리 더보기" width="34" height="34" aria-hidden="true"><use href="#i-more"/></svg>
+          </div>
+
+          <!-- remind: Clare -->
+          <div data-z="리마인드 영역" id="h-remind" class="a" style="left:0;top:126px;width:390px;height:385px;overflow:hidden">
+            <div class="a" style="left:20px;top:0;display:flex;gap:4px;align-items:flex-start"><span class="h20">이런 순간이 있었네요</span><span class="remind">Remind</span></div>
+            <div class="a t2car" id="h-car" style="left:0;top:36px;width:390px;height:301px">
+              <div class="counter c1 t2cnt" aria-live="polite"><b>1</b><em></em><i>3</i></div>
+              <!-- 두드리기: 카드를 넘겨도 같은 자리에 떠 있음 -->
+              <button class="fab hknock" type="button" id="t-hknock" data-z="Clare 두드리기" style="left:306px;top:214px;width:56px;height:56px;z-index:6" aria-label="두드리기"><svg class="a" width="35" height="35" style="left:10.5px;top:11px" aria-hidden="true"><use href="#i-knock"/></svg></button>
+              <div data-z="Clare 게시물" class="card main t2c" data-i="0">
+              <img class="a" src="img/16_mintcho-switch.webp" alt="" style="left:-29px;top:-172px;width:387px;height:516px;object-fit:cover">
+              <div class="g-bottom" style="--c:115,115,115"></div>
+              <button class="who" type="button" id="t-clare" style="left:8px;top:14px;padding:4px 8px 4px 4px;border-radius:20px" aria-label="Clare 프로필 보기">
+                <span style="position:relative;width:30px;height:30px;border-radius:75px;overflow:hidden;background:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,0.3);flex:none">
+                  <img class="a" src="img/17_clare-photo.webp" alt="" style="left:-1.75px;top:-11.5px;width:32.162px;height:57.157px;object-fit:cover">
+                </span>
+                <span>Clare</span>
+              </button>
+              <div class="counter c1"><b>1</b><em></em><i>3</i></div>
+              <div class="ctitle">민초템 꾸꾸</div>
+            </div>
+              <div data-z="Clare 게시물 2장" class="card main t2c" data-i="1"><img class="ph" src="img/34_clare-post-3b.webp" alt=""><div class="counter c1"><b>2</b><em></em><i>3</i></div></div>
+              <div data-z="Clare 게시물 3장" class="card main t2c" data-i="2"><img class="ph" src="img/33_clare-post-2b.webp" alt=""><div class="counter c1"><b>3</b><em></em><i>3</i></div></div>
+            </div>
+            <div data-z="Clare 게시물 글" class="a t13 cy nw hfold" style="left:25px;top:339px;overflow:hidden;text-overflow:ellipsis;width:296px">스위치에 새로운 캡 달았는데 어때요 #민초맛캡 민트 캡이랑...</div>
+            <div data-z="더 보기" id="h-more" role="button" tabindex="0" class="a more cy nw hfold" style="left:326px;top:339px;cursor:pointer">더 보기</div>
+            <div class="a n14 nw hfold" style="left:25px;top:348px">mybossmn</div>
+            <div class="a t13 nw hfold" style="left:98px;top:349px">ㅋㅋㅋㅋ나도 사줘</div>
+            <div class="a ago nw hfold" style="left:25px;top:368px">4일 전</div>
+            <div id="h-open" class="a" hidden style="left:0;top:334px;width:390px">
+              <div class="t13" data-z="게시물 글 (펼침)" style="padding:0 25px;word-break:keep-all">스위치에 새로운 캡 달았는데 어때요 #민초맛캡 민트 캡이랑 같이 끼우니까 색 조합이 너무 귀여워서 한참 들여다봄</div>
+              <div class="ago" style="padding:4px 25px 12px">4일 전</div>
+              <div class="cbar" data-z="댓글 바">
+                <div class="a" style="left:17px;top:0;width:357px;height:1px;background:#D6D6D6"></div>
+                <button type="button" id="h-cbtn" class="a" style="left:13px;top:9px;height:32px;padding:0 6px;border-radius:8px;display:flex;align-items:center;gap:6px" aria-label="댓글 쓰기">
+                  <svg width="17" height="17" style="overflow:visible" aria-hidden="true"><use href="#i-comment"/></svg>
+                  <span style="font-weight:600;font-size:14px;line-height:1.5;letter-spacing:-0.35px;color:#000">4</span>
+                </button>
+                <button type="button" id="h-fold" class="a" style="left:338px;top:1px;width:48px;height:48px;display:flex;align-items:center;justify-content:center" aria-label="접기"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 15.5L12 8.5L19 15.5" stroke="#121212" fill="none"/></svg></button>
+              </div>
+              <div class="t2comments" data-z="댓글 목록" style="display:flex;flex-direction:column;gap:16px;padding:8px 0 4px">
+                <div class="cmt" data-z="댓글"><div class="av" style="background:#9A9A9A"></div><div class="body"><div class="head"><span class="cm-name">mybossmn</span><span class="cm-ago">2일</span><span class="lk"><svg width="10.667" height="9.787" aria-hidden="true"><use href="#i-heart"/></svg>2</span></div><div class="text">ㅋㅋㅋㅋ나도 사줘</div></div></div>
+                <div class="cmt reply" data-z="답글"><div class="av"><img src="img/17_clare-photo.webp" alt=""></div><div class="body"><div class="head"><span class="cm-name">Clare</span><span class="cm-ago">2일</span></div><div class="text"><span class="mention">@mybossmn</span> 다음에 같이 사러 가자ㅋㅋ 너도 민트 캡 잘 어울릴 듯</div></div></div>
+                <div class="cmt" data-z="댓글"><div class="av" style="background:#C4C4C4"></div><div class="body"><div class="head"><span class="cm-name">lumi_desk</span><span class="cm-ago">3일</span><span class="lk"><svg width="10.667" height="9.787" aria-hidden="true"><use href="#i-heart"/></svg>1</span></div><div class="text">캡 어디서 샀어요? 링크 공유 부탁드려요!</div></div></div>
+                <div class="cmt" data-z="댓글"><div class="av" style="background:#6E6E6E"></div><div class="body"><div class="head"><span class="cm-name">sooah.toy</span><span class="cm-ago">4일</span><span class="lk"><svg width="10.667" height="9.787" aria-hidden="true"><use href="#i-heart"/></svg>1</span></div><div class="text">민트에 딸기 조합 미쳤다 저도 따라 해볼래요</div></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- new posts (Figma 1:484) -->
+          <div data-z="새 게시물 영역" id="h-new" class="a" style="left:0;top:543px;width:390px;height:760px;overflow:hidden">
+            <div class="a h20" style="left:20px;top:0">새로운 게시물을 확인해보세요</div>
+
+            <!-- maka -->
+            <div class="a t2post" id="h-p-maka" data-base="350" style="left:0;top:0px;width:390px;overflow:hidden">
+            <div class="a t2car" style="left:0;top:0;width:390px;height:301px">
+              <div class="counter c1 t2cnt" aria-live="polite"><b>1</b><em></em><i>2</i></div>
+              <div data-z="maka 게시물" class="card main t2c" data-i="0">
+                <img class="ph" src="img/30_maka-post-2.webp" alt="">
+                <div class="g-bottom" style="--c:187,136,139"></div>
+                <div class="who"><img class="av" src="img/03_maka-avatar.webp" alt=""><span>maka</span></div>
+                <div class="counter c1"><b>1</b><em></em><i>2</i></div>
+                <div class="ctitle">오늘도 고전템</div>
+                <div class="t2rx"><div data-z="maka 반응 버튼" class="react" style="top:243px">💕 하트</div></div>
+              </div>
+              <div data-z="maka 게시물 2장" class="card main t2c" data-i="1"><img class="a" src="img/02_maka-post.webp" alt="" style="left:-12px;top:-69px;width:424px;height:421px;object-fit:cover"><div class="counter c1"><b>2</b><em></em><i>2</i></div></div>
+            </div>
+            <div data-z="maka 게시물 글" class="a t13 nw t2fold" style="left:25px;top:294px;overflow:hidden;text-overflow:ellipsis;width:296px">#동대문헬로키티 #클로버잔뜩 동생이랑 동대문 잡화점 들...</div>
+            <div data-z="더 보기" role="button" tabindex="0" class="a more cy nw t2fold t2more" style="left:326px;top:303px;cursor:pointer">더 보기</div>
+            <div class="a n14 nw t2fold t2pname" style="left:25px;top:313px">hana.k</div>
+            <div class="a t13 nw t2fold t2ptext" style="left:76px;top:315px;max-width:289px;overflow:hidden;text-overflow:ellipsis">키티 밑에 클로버 키링 가격 궁금해요🥹 넘 예뻐...</div>
+            <div class="a ago nw t2fold t2ago" style="left:25px;top:333px">13초 전</div>
+            <div class="a t2open" hidden style="left:0;top:299px;width:390px">
+              <div class="t13" data-z="게시물 글 (펼침)" style="padding:0 25px;word-break:keep-all">#동대문헬로키티 #클로버잔뜩 동생이랑 동대문 잡화점 들렀다가 키링을 잔뜩 데려왔어요🍀 클로버 들어간 건 다 예뻐 보여서 고르느라 한참 걸렸어요</div>
+              <div class="ago" style="padding:4px 25px 12px">13초 전</div>
+              <div class="cbar" data-z="댓글 바">
+                <div class="a" style="left:17px;top:0;width:357px;height:1px;background:#D6D6D6"></div>
+                <button type="button" class="a t2cbtn" style="left:13px;top:9px;height:32px;padding:0 6px;border-radius:8px;display:flex;align-items:center;gap:6px" aria-label="댓글 쓰기">
+                  <svg width="17" height="17" style="overflow:visible" aria-hidden="true"><use href="#i-comment"/></svg>
+                  <span class="t2ccount" style="font-weight:600;font-size:14px;line-height:1.5;letter-spacing:-0.35px;color:#000">1</span>
+                </button>
+                <button type="button" class="a t2foldbtn" style="left:338px;top:1px;width:48px;height:48px;display:flex;align-items:center;justify-content:center" aria-label="접기"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 15.5L12 8.5L19 15.5" stroke="#121212" fill="none"/></svg></button>
+              </div>
+              <div class="t2comments" data-z="댓글 목록" style="display:flex;flex-direction:column;gap:16px;padding:8px 0 4px">
+                <div class="cmt" data-z="댓글"><div class="av" style="background:#9A9A9A"></div><div class="body"><div class="head"><span class="cm-name">hana.k</span><span class="cm-ago">방금</span></div><div class="text">키티 밑에 클로버 키링 가격 궁금해요🥹 넘 예뻐요</div></div></div>
+              </div>
+            </div>
+          </div>
+
+            <!-- Yeeun -->
+            <div class="a t2post" id="h-p-yeeun" data-base="329.86" style="left:0;top:0px;width:390px;overflow:hidden">
+            <div class="a t2car" style="left:0;top:0;width:390px;height:301px">
+              <div class="counter c1 t2cnt" aria-live="polite"><b>1</b><em></em><i>3</i></div>
+              <div data-z="Yeeun 게시물" class="card main t2c" data-i="0">
+                <img class="ph" src="img/31_yeeun-post-2.webp" alt="">
+                <div class="g-bottom" style="--c:223,205,159"></div>
+                <div class="who"><img class="av" src="img/06_yeeun-avatar.webp" alt=""><span>Yeeun</span></div>
+                <div class="counter c1"><b>1</b><em></em><i>3</i></div>
+                <div class="ctitle">주간 그릇무덤</div>
+                <div class="t2rx"><div data-z="Yeeun 반응 버튼" class="react" style="top:243px">💕 하트</div></div>
+              </div>
+              <div data-z="Yeeun 게시물 2장" class="card main t2c" data-i="1"><img class="ph" src="img/32_yeeun-post-3.webp" alt=""><div class="counter c1"><b>2</b><em></em><i>3</i></div></div>
+              <div data-z="Yeeun 게시물 3장" class="card main t2c" data-i="2"><img class="a" src="img/05_yeeun-post.webp" alt="" style="left:-53px;top:-173px;width:443px;height:543px;object-fit:cover"><div class="counter c1"><b>3</b><em></em><i>3</i></div></div>
+            </div>
+            <div data-z="Yeeun 게시물 글" class="a t13 nw t2fold" style="left:25px;top:293.86px;overflow:hidden;text-overflow:ellipsis;width:296px">52번째 컵 들였습니다 컵 사는 거 어떻게 참아요 #빈티지그...</div>
+            <div data-z="더 보기" role="button" tabindex="0" class="a more cy nw t2fold t2more" style="left:326px;top:302.86px;cursor:pointer">더 보기</div>
+            <div class="a n14 nw t2fold t2pname" hidden style="left:25px;top:312.86px"></div>
+            <div class="a t13 nw t2fold t2ptext" hidden style="left:76px;top:314.86px;max-width:289px;overflow:hidden;text-overflow:ellipsis"></div>
+            <div class="a ago nw t2fold t2ago" style="left:25px;top:312.86px">1분 전</div>
+            <div class="a t2open" hidden style="left:0;top:298.86px;width:390px">
+              <div class="t13" data-z="게시물 글 (펼침)" style="padding:0 25px;word-break:keep-all">52번째 컵 들였습니다 컵 사는 거 어떻게 참아요 #빈티지그릇 #컵수집 이번 건 곰돌이 무늬가 너무 귀여워서 보자마자 데려왔어요</div>
+              <div class="ago" style="padding:4px 25px 12px">1분 전</div>
+              <div class="cbar" data-z="댓글 바">
+                <div class="a" style="left:17px;top:0;width:357px;height:1px;background:#D6D6D6"></div>
+                <button type="button" class="a t2cbtn" style="left:13px;top:9px;height:32px;padding:0 6px;border-radius:8px;display:flex;align-items:center;gap:6px" aria-label="댓글 쓰기">
+                  <svg width="17" height="17" style="overflow:visible" aria-hidden="true"><use href="#i-comment"/></svg>
+                  <span class="t2ccount" style="font-weight:600;font-size:14px;line-height:1.5;letter-spacing:-0.35px;color:#000">0</span>
+                </button>
+                <button type="button" class="a t2foldbtn" style="left:338px;top:1px;width:48px;height:48px;display:flex;align-items:center;justify-content:center" aria-label="접기"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 15.5L12 8.5L19 15.5" stroke="#121212" fill="none"/></svg></button>
+              </div>
+              <div class="t2comments" data-z="댓글 목록" style="display:flex;flex-direction:column;gap:16px;padding:8px 0 4px">
+              </div>
+            </div>
+          </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- fixed layers -->
+      <div class="htoast" id="h-toast" role="status" aria-live="polite" hidden>다른 방법을 찾아보세요</div>
+      <div data-z="상태바" class="statusbar" style="height:44px">
+        <div class="a" style="left:18px;top:12px;width:54px;text-align:center;font-family:var(--sys);font-weight:600;font-size:15px;line-height:20px;letter-spacing:-0.5px;color:#111">9:41</div>
+        <svg class="a" width="66.656" height="11.337" style="right:17.67px;top:16.33px" aria-hidden="true"><use href="#i-status"/></svg>
+      </div>
+      <div data-z="+ 버튼" class="fab" style="left:305px;bottom:129px"><svg class="a" width="29" height="29" style="left:16px;top:15px" aria-hidden="true"><use href="#i-plus"/></svg></div>
+      <div class="nav" data-z="하단 메뉴">
+        <div class="glass"></div>
+        <div class="on"></div>
+        <div class="row">
+          <div data-z="홈 탭" class="item cur"><svg width="34" height="34" aria-hidden="true"><use href="#i-home"/></svg>홈</div>
+          <div data-z="채팅 탭" class="item"><svg width="34" height="34" aria-hidden="true"><use href="#i-chat"/></svg>채팅</div>
+          <button type="button" id="t-navsearch" data-z="검색 탭" class="item"><svg width="34" height="34" aria-hidden="true"><use href="#i-search34"/></svg>검색</button>
+          <div data-z="프로필 탭" class="item"><svg width="34" height="34" aria-hidden="true"><use href="#i-profile"/></svg>프로필</div>
+        </div>
+      </div>
+      <div class="indicator"></div>
+    </div>
+  </section>
+
+  <!-- ================= PROFILE (Figma 1:1010) ================= -->
+  <section class="screen app" id="s-profile" aria-label="Clare 프로필">
+    <div class="z">
+      <div class="fill scroll" id="profile-scroll">
+        <div class="a" style="left:0;top:0;width:390px;height:1150px;background:var(--app-bg)">
+          <!-- white sheet -->
+          <div data-z="아래 주제 목록" class="a" style="left:0;top:487px;width:390px;height:663px;background:#fff;box-shadow:0 -4px 10px rgba(0,0,0,0.03)">
+            <div class="a" style="left:16px;top:186px;width:358px;display:flex;flex-direction:column;align-items:center;gap:12px">
+              <svg width="335" height="9" style="margin-top:-1px" aria-hidden="true"><use href="#i-sheet"/></svg>
+              <div style="display:grid;grid-template-columns:175px 175px;gap:8px">
+                <div class="topic" style="background:#767676"><img class="a" src="img/18_topic-newpipi.webp" alt="" style="left:-3.47%;top:-57.17%;width:107.87%;height:215.19%"><div class="lb">뉴삐삐케이스</div><div class="newb" style="left:139px;top:13px">new</div></div>
+                <div class="topic" style="border:3px solid var(--ink);box-shadow:0 4px 10px rgba(18,18,18,0.25)"><img class="a" src="img/16_mintcho-switch.webp" alt="" style="left:-94.95px;top:-189.29px;width:271.95px;height:362.07px"><div class="lb">민초맛캡</div></div>
+                <div class="topic"><img class="ph" src="img/20_topic-kitsch.webp" alt=""><div class="lb">키치스티커꾸</div></div>
+                <div class="topic"><img class="a" src="img/21_topic-mintkeyring.webp" alt="" style="left:0px;top:-114.26px;width:204.01px;height:271.86px"><div class="lb">민트맛키링</div></div>
+                <div class="topic"><img class="ph" src="img/22_topic-mintsticker.webp" alt=""><div class="lb">민트스티커</div></div>
+                <div class="topic"><img class="a" src="img/23_topic-mintmatch.webp" alt="" style="left:0;top:0;width:175px;height:139px;transform-origin:0 0;transform:matrix(1.20134,0.27390,-0.61252,2.68840,13.974,-95.600)"><div class="lb">민트깔맞춤</div></div>
+                <div class="topic" style="background:#767676"><img class="a" src="img/24_topic-catkeycap.webp" alt="" style="left:-24.0px;top:-49.01px;width:211.99px;height:262.51px"><div class="lb">고양이키캡</div></div>
+                <div class="topic"><img class="ph" src="img/19_topic-desk.webp" alt=""><div class="lb">책상꾸꾸</div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- photo stack -->
+          <div data-z="사진" class="stack" style="top:253px;width:242px;height:178px;margin-left:-121px"><img class="ph" src="img/22_topic-mintsticker.webp" alt=""><div class="fill" style="background:rgba(208,208,208,0.6)"></div></div>
+          <div data-z="사진" class="stack" style="top:201px;width:290px;height:214px;margin-left:-145px"><img class="ph" src="img/19_topic-desk.webp" alt=""><div class="fill" style="background:rgba(208,208,208,0.4)"></div></div>
+          <div data-z="사진" class="stack" style="top:107px;width:358px;height:284px;margin-left:-179px">
+            <img class="a" src="img/16_mintcho-switch.webp" alt="" style="left:-188.1px;top:-380.61px;width:556.33px;height:739.78px">
+            <div class="a" style="left:200px;top:31px;width:90.626px;height:57.46px;display:flex;align-items:center;justify-content:center">
+              <div style="transform:rotate(-21.21deg);background:rgba(234,255,210,0.7);padding:4.072px 8.144px;border-radius:4.072px;box-shadow:0 4.072px 10.181px rgba(0,0,0,0.05);font-weight:600;font-size:13px;line-height:1.5;letter-spacing:-0.13px;white-space:nowrap"># 민초템 꾸꾸</div>
+            </div>
+          </div>
+          <button class="fab" type="button" id="t-knock" style="left:305px;top:400px" aria-label="두드리기"><svg class="a" width="37" height="37" style="left:11.5px;top:12px" aria-hidden="true"><use href="#i-knock"/></svg></button>
+
+          <!-- header -->
+          <div data-z="상단 영역" class="a" style="left:0;top:47px;width:390px;height:52px;box-sizing:border-box;padding:0 16px 0 4px;display:flex;align-items:center;gap:4px">
+            <button type="button" id="t-back" style="width:44px;height:44px;flex:none;border-radius:22px" aria-label="뒤로"><svg width="44" height="44" aria-hidden="true"><use href="#i-back"/></svg></button>
+            <div data-z="상단 탭" class="tabs23" style="line-height:22px"><span style="color:#D3D1CD">영화</span><span style="color:#D3D1CD">다꾸</span><span>수집</span><span style="color:#D3D1CD">일상</span></div>
+            <div class="a" style="left:256.5px;top:25.5px;width:69.5px;height:1.05px;background:#D3D1CD"></div>
+            <div data-z="Clare 프로필 사진" class="a" style="left:340px;top:10px;width:32px;height:32px;border-radius:80px;overflow:hidden;background:#fff;box-shadow:inset 0 0 0 1.067px rgba(255,255,255,0.3)"><img class="a" src="img/17_clare-photo.webp" alt="" style="left:-1.86px;top:-12.27px;width:34.306px;height:60.967px;object-fit:cover"></div>
+          </div>
+
+          <!-- search -->
+          <div data-z="검색창" class="a" style="left:16px;top:503px;width:358px;height:52px;box-sizing:border-box;padding:0 19px;border-radius:100px;background:#F7F7F7;display:flex;align-items:center">
+            <span style="width:296px;font-size:16px;line-height:1.5;letter-spacing:-0.4px;color:#919191">기억나는 주제를 검색해보세요</span>
+            <svg width="24" height="24" aria-hidden="true"><use href="#i-search24"/></svg>
+          </div>
+          <!-- 주제 | 게시글 -->
+          <div data-z="주제/게시글 탭" class="a" style="left:21px;top:583px;display:flex;gap:8px;align-items:center;white-space:nowrap">
+            <span style="font-weight:700;font-size:18px;line-height:22px;letter-spacing:-0.45px">주제</span>
+            <span style="width:1px;height:12px;background:#C8C8C8"></span>
+            <span style="font-weight:600;font-size:18px;line-height:22px;letter-spacing:-0.45px;color:#A3A3A3">게시글</span>
+          </div>
+          <div class="chipbox" data-z="주제 칩" style="left:16px;background:var(--ink)">
+            <div class="tx" style="color:#fff">민초템 꾸꾸</div>
+            <div class="cnt" style="background:var(--ink);border:1px solid var(--tint);color:#fff;line-height:18px">12</div>
+            <div class="newb" style="left:139px;top:2px">new</div>
+          </div>
+          <div class="chipbox" data-z="주제 칩" style="left:199px;background:#F0F0F0">
+            <div class="tx" style="color:var(--ink)">이번 시즌 옷장템</div>
+            <div class="cnt" style="background:#fff;color:#7A7A7A">7</div>
+          </div>
+        </div>
+      </div>
+      <div class="statusbar" style="height:47px">
+        <div class="a" style="left:27px;top:14px;width:54px;text-align:center;font-family:var(--sys);font-weight:600;font-size:17px;line-height:21px;letter-spacing:-0.408px;color:#000">9:41</div>
+        <svg class="a" width="78.261" height="13" style="right:26px;top:18px" aria-hidden="true"><use href="#i-status"/></svg>
+      </div>
+      <div class="indicator"></div>
+    </div>
+  </section>
+
+  <!-- ================= SEND (Figma 1:859) ================= -->
+  <section class="screen modal app" id="s-send" aria-label="간편 메세지 보내기">
+    <div class="z"><div class="mwrap">
+      <div class="dialog" style="width:340px;height:437px" role="dialog" aria-label="Clare에게 간편 메세지를 보낼까요?">
+        <div class="avatar40" data-z="Clare 프로필 사진"><img class="a" src="img/17_clare-photo.webp" alt="" style="left:-1px;top:-14px;width:43px;height:76px;object-fit:cover"></div>
+        <div class="mh" data-z="제목·안내 문구" style="left:71px;top:40px;font-size:20px;letter-spacing:-0.2px">Clare</div>
+        <div class="mh" data-z="제목·안내 문구" style="left:124px;top:40.5px;font-size:18px;letter-spacing:-0.18px">에게</div>
+        <div class="mh" data-z="제목·안내 문구" style="left:71px;top:67.5px;font-size:18px;letter-spacing:-0.18px">간편 메세지를 보낼까요?</div>
+        <div class="msub" data-z="제목·안내 문구" style="left:71px;top:86px">보고싶은 친구를 가볍게 불러보세요:)</div>
+        <button class="switch" type="button" role="switch" aria-checked="true" id="anon" aria-label="익명"><span class="ax"></span><span class="knob">익명</span></button>
+        <div class="tabtag" data-z="수집 탭" style="left:31px;top:127px;width:61px;padding:4px 12px 12px">수집</div>
+        <div class="box" data-z="칩 상자 빈 곳" style="left:31px;top:148px;height:137px">
+          <div class="chiprows" id="chips">
+            <div><button class="chip sel" type="button" aria-pressed="true">다음 내용 궁금🙌</button><button class="chip" type="button" aria-pressed="false">하나 더!👀</button></div>
+            <div><button class="chip" type="button" aria-pressed="false">이 주제 좋다</button><button class="chip" type="button" aria-pressed="false">요즘 뭐해😲</button><button class="chip" type="button" aria-pressed="false">근황 궁금</button></div>
+            <div><button class="chip" type="button" aria-pressed="false">이번 주 어땠어</button><button class="chip" type="button" aria-pressed="false">이거 괜찮다</button></div>
+          </div>
+        </div>
+        <button class="mbtn dark" type="button" id="t-send" style="top:305px">네 이렇게 보낼래요</button>
+        <button class="mbtn light" type="button" id="t-later" style="top:365px">나중에 보낼래요</button>
+      </div>
+    </div></div>
+  </section>
+
+  <!-- ================= SENT (Figma 1:989) ================= -->
+  <section class="screen modal app" id="s-sent" aria-label="전송 완료">
+    <div class="z"><div class="mwrap">
+      <div class="dialog" style="width:338px;height:319px" role="dialog" aria-label="간편 메세지 전송을 완료했어요">
+        <img class="a" data-z="아이콘" src="img/25_icon-sent.webp" alt="" style="left:134px;top:49px;width:70px;height:70px;pointer-events:auto">
+        <div class="mh" data-z="제목·안내 문구" style="left:0;right:0;top:155.5px;text-align:center;font-size:18px;letter-spacing:-0.18px">간편 메세지 전송을 완료했어요</div>
+        <div class="msub" data-z="제목·안내 문구" style="left:0;right:0;top:174px;text-align:center">답장이 오면 알려드릴게요</div>
+        <button class="mbtn dark glowbtn" type="button" id="t-ok" style="top:248px">확인</button>
+      </div>
+    </div></div>
+  </section>
+
+  <section class="screen scroll" id="s-m2"></section>
+
+  <!-- ================= REPLY ARRIVED (Figma 1:1177) ================= -->
+  <section class="screen modal app" id="s-arrived" aria-label="간편 답장 도착">
+    <div class="z"><div class="mwrap">
+      <div class="dialog" style="width:338px;height:319px" role="dialog" aria-label="간편 답장이 도착했어요">
+        <img class="a" data-z="아이콘" src="img/26_icon-reply.webp" alt="" style="left:134px;top:49px;width:70px;height:70px;pointer-events:auto">
+        <div class="mh" data-z="제목·안내 문구" style="left:0;right:0;top:155.5px;text-align:center;font-size:18px;letter-spacing:-0.18px">간편 답장이 도착했어요</div>
+        <div class="msub" data-z="제목·안내 문구" style="left:0;right:0;top:174px;text-align:center">from. Clare</div>
+        <button class="mbtn dark glowbtn" type="button" id="t-open" style="top:248px">답장 확인하기</button>
+      </div>
+    </div></div>
+  </section>
+
+  <!-- ================= REPLY (Figma 1:1278) ================= -->
+  <section class="screen modal app" id="s-reply" aria-label="답장 내용">
+    <div class="z"><div class="mwrap">
+      <div class="dialog" style="width:340px;height:283px" role="dialog" aria-label="Clare의 답장">
+        <div class="avatar40" data-z="Clare 프로필 사진"><img class="a" src="img/17_clare-photo.webp" alt="" style="left:-1px;top:-14px;width:43px;height:76px;object-fit:cover"></div>
+        <div class="mh" data-z="제목·안내 문구" style="left:71px;top:40px;font-size:20px;letter-spacing:-0.2px">Clare</div>
+        <div class="mh" data-z="제목·안내 문구" style="left:124px;top:40.5px;font-size:18px;letter-spacing:-0.18px">에게</div>
+        <div class="mh" data-z="제목·안내 문구" style="left:71px;top:67.5px;font-size:18px;letter-spacing:-0.18px">답장이 도착했어요</div>
+        <div class="tabtag" data-z="수집 탭" style="left:32px;top:104px;padding:4px 20px 12px">수집</div>
+        <div class="box" data-z="수집 답장 칩" style="left:32px;top:125px;height:53px"><span class="chip a" id="reply-chip" style="left:13px;top:12px">3일 이내 업로드 예정!</span></div>
+        <button class="mbtn dark" type="button" id="t-read" style="top:211px">확인</button>
+      </div>
+    </div></div>
+  </section>
+
+  <section class="screen scroll" id="s-q3"></section>
+  <section class="screen scroll" id="s-q4"></section>
+  <section class="screen scroll" id="s-q5"></section>
+  <section class="screen scroll" id="s-m3"></section>
+
+  <!-- ================= ROUND 2 · SEARCH (Figma 1:2599 / 1:2657) ================= -->
+  <section class="screen app" id="s-search" aria-label="검색">
+    <div class="z">
+      <div class="fill" style="background:var(--app-bg)"></div>
+      <div class="statusbar" data-z="상태바" style="height:44px">
+        <div class="a" style="left:18px;top:12px;width:54px;text-align:center;font-family:var(--sys);font-weight:600;font-size:15px;line-height:20px;letter-spacing:-0.5px;color:#111">9:41</div>
+        <svg class="a" width="66.656" height="11.337" style="right:17.67px;top:16.33px" aria-hidden="true"><use href="#i-status"/></svg>
+      </div>
+      <div class="a" data-z="검색 영역" style="left:0;top:58px;width:390px;height:53px;background:rgba(255,255,255,0.1)">
+        <button type="button" id="t-sfield" class="a" style="left:15px;top:9px;width:292px;height:35px;box-sizing:border-box;padding-left:5px;border-radius:10px;background:rgba(196,196,196,0.4);display:flex;align-items:center;gap:3px;text-align:left" aria-label="검색어 입력">
+          <span style="width:24px;height:24px;display:flex;align-items:center;justify-content:center"><svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-search24"/></svg></span>
+          <span style="font-weight:500;font-size:16px;line-height:1.2;letter-spacing:-0.4px;color:var(--ink)">검색</span>
+        </button>
+        <button type="button" id="t-scancel" class="a" style="left:319px;top:5px;width:59px;height:43px;border-radius:21px;background:rgba(255,255,255,0.76);font-weight:500;font-size:16px;letter-spacing:-0.4px;color:var(--ink)">취소</button>
+      </div>
+      <div class="a" id="recent" hidden style="left:0;top:111px;width:390px">
+        <div data-z="최근 검색 제목" style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px 6px">
+          <span style="font-weight:600;font-size:15px;letter-spacing:-0.3px">최근 검색</span>
+          <span style="font-size:13px;font-weight:500;color:#3B7BF6">모두 보기</span>
+        </div>
+        <button type="button" id="t-zrow" style="display:flex;align-items:center;gap:12px;width:100%;box-sizing:border-box;padding:8px 16px;text-align:left" aria-label="John">
+          <span style="flex:none;width:48px;height:48px;border-radius:50%;padding:2px;box-sizing:border-box;background:linear-gradient(135deg,#C8F07A,#6D8429)"><span style="display:block;width:100%;height:100%;border-radius:50%;overflow:hidden;box-shadow:0 0 0 2px #F3F3F3;position:relative"><img class="ph" src="img/09_zzumang-avatar.webp" alt=""></span></span>
+          <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px"><span style="font-weight:600;font-size:15px;line-height:1.3;letter-spacing:-0.3px">John</span><span style="font-size:13px;line-height:1.3;color:#8A8A8A;letter-spacing:-0.2px">굳세어라 산책day</span></span>
+          <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="#9A9A9A" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="nav" data-z="하단 메뉴">
+        <div class="glass"></div>
+        <div class="on" style="left:168px"></div>
+        <div class="row">
+          <button type="button" id="t-snavhome" data-z="홈 탭" class="item"><svg width="34" height="34" aria-hidden="true"><use href="#i-home"/></svg>홈</button>
+          <div data-z="채팅 탭" class="item"><svg width="34" height="34" aria-hidden="true"><use href="#i-chat"/></svg>채팅</div>
+          <div data-z="검색 탭" class="item cur"><svg width="34" height="34" aria-hidden="true"><use href="#i-search34b"/></svg>검색</div>
+          <div data-z="프로필 탭" class="item"><svg width="34" height="34" aria-hidden="true"><use href="#i-profile"/></svg>프로필</div>
+        </div>
+      </div>
+      <div class="indicator"></div>
+    </div>
+  </section>
+
+  <!-- ================= ROUND 2 · JOHN PROFILE ================= -->
+  <section class="screen app" id="s-zprofile" aria-label="John 프로필">
+    <div class="z">
+      <div class="fill scroll" id="zprofile-scroll">
+        <div class="a" style="left:0;top:0;width:390px;height:1310px;background:var(--app-bg)">
+          <!-- white sheet -->
+          <div data-z="아래 주제 목록" class="a" style="left:0;top:487px;width:390px;height:823px;background:#fff;box-shadow:0 -4px 10px rgba(0,0,0,0.03)">
+            <div class="a" style="left:16px;top:186px;width:358px;display:flex;flex-direction:column;align-items:center;gap:12px">
+              <svg width="335" height="9" style="margin-top:-1px" aria-hidden="true"><use href="#i-sheet"/></svg>
+              <div style="display:grid;grid-template-columns:175px 175px;gap:8px">
+                <button type="button" id="t-ztopic" class="topic" aria-pressed="false" aria-label="굳세어라 산책day 주제"><img class="ph" src="img/08_zzumang-post.webp" alt=""><span class="lb">굳세어라 산책day</span><span class="newb" style="left:139px;top:13px">new</span></button>
+                <div class="topic" data-z="주제 카드" style="background:#ABABAB"><img class="ph" src="img/35_john-park.webp" alt=""><div class="lb">중앙공원 한바퀴</div></div>
+                <div class="topic" data-z="주제 카드" style="background:#ABABAB"><img class="ph" src="img/36_john-flower.webp" alt=""><div class="lb">하천 꽃길 산책</div></div>
+                <div class="topic" data-z="주제 카드" style="background:#ABABAB"><img class="ph" src="img/37_john-rain.webp" alt="" style="object-position:50% 74%"><div class="lb">비 오는 날 산책</div></div>
+                <div class="topic" data-z="주제 카드" style="background:#ABABAB"><img class="ph" src="img/38_john-harness.webp" alt="" style="object-position:50% 38%"><div class="lb">새 하네스 개시</div></div>
+                <div class="topic" data-z="주제 카드" style="background:#ABABAB"><img class="ph" src="img/39_john-bath.webp" alt="" style="object-position:50% 42%"><div class="lb">산책 후 목욕</div></div>
+                <div class="topic" data-z="주제 카드" style="background:#ABABAB"><img class="ph" src="img/41_john-sunset.webp" alt=""><div class="lb">노을 산책</div></div>
+                <div class="topic" data-z="주제 카드" style="background:#ABABAB"><img class="ph" src="img/40_john-treats.webp" alt="" style="object-position:30% 30%"><div class="lb">산책 간식 리뷰</div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- photo stack -->
+          <div data-z="사진" class="stack" style="top:253px;width:242px;height:178px;margin-left:-121px"><img class="ph" src="img/22_topic-mintsticker.webp" alt=""><div class="fill" style="background:rgba(208,208,208,0.6)"></div></div>
+          <div data-z="사진" class="stack" style="top:201px;width:290px;height:214px;margin-left:-145px"><img class="ph" src="img/19_topic-desk.webp" alt=""><div class="fill" style="background:rgba(208,208,208,0.4)"></div></div>
+          <div data-z="사진" class="stack" style="top:107px;width:358px;height:284px;margin-left:-179px">
+            <img class="ph" src="img/08_zzumang-post.webp" alt="">
+            <div class="a" style="right:22px;top:22px">
+              <div style="background:rgba(234,255,210,0.7);padding:4.072px 8.144px;border-radius:4.072px;box-shadow:0 4.072px 10.181px rgba(0,0,0,0.05);font-weight:600;font-size:13px;line-height:1.5;letter-spacing:-0.13px;white-space:nowrap"># 굳세어라 산책day</div>
+            </div>
+            <button class="a" type="button" id="t-zphoto" style="inset:0;border-radius:24px" aria-label="John 게시물 보기"></button>
+          </div>
+          <button class="fab" type="button" id="t-zknock" style="left:305px;top:400px" aria-label="두드리기"><svg class="a" width="37" height="37" style="left:11.5px;top:12px" aria-hidden="true"><use href="#i-knock"/></svg></button>
+
+          <!-- header -->
+          <div data-z="상단 영역" class="a" style="left:0;top:47px;width:390px;height:52px;box-sizing:border-box;padding:0 16px 0 4px;display:flex;align-items:center;gap:4px">
+            <button type="button" id="t-zback" style="width:44px;height:44px;flex:none;border-radius:22px" aria-label="뒤로"><svg width="44" height="44" aria-hidden="true"><use href="#i-back"/></svg></button>
+            <div data-z="상단 탭" class="tabs23" style="line-height:22px"><span style="color:#D3D1CD">영화</span><span style="color:#D3D1CD">다꾸</span><span>수집</span><span style="color:#D3D1CD">일상</span></div>
+            <div class="a" style="left:256.5px;top:25.5px;width:69.5px;height:1.05px;background:#D3D1CD"></div>
+            <div data-z="John 프로필 사진" class="a" style="left:340px;top:10px;width:32px;height:32px;border-radius:80px;overflow:hidden;background:#fff;box-shadow:inset 0 0 0 1.067px rgba(255,255,255,0.3)"><img class="ph" src="img/09_zzumang-avatar.webp" alt=""></div>
+          </div>
+
+          <!-- search -->
+          <div data-z="검색창" class="a" style="left:16px;top:503px;width:358px;height:52px;box-sizing:border-box;padding:0 19px;border-radius:100px;background:#F7F7F7;display:flex;align-items:center">
+            <span style="width:296px;font-size:16px;line-height:1.5;letter-spacing:-0.4px;color:#919191">기억나는 주제를 검색해보세요</span>
+            <svg width="24" height="24" aria-hidden="true"><use href="#i-search24"/></svg>
+          </div>
+          <!-- 주제 | 게시글 -->
+          <div data-z="주제/게시글 탭" class="a" style="left:21px;top:583px;display:flex;gap:8px;align-items:center;white-space:nowrap">
+            <span style="font-weight:700;font-size:18px;line-height:22px;letter-spacing:-0.45px">주제</span>
+            <span style="width:1px;height:12px;background:#C8C8C8"></span>
+            <span style="font-weight:600;font-size:18px;line-height:22px;letter-spacing:-0.45px;color:#A3A3A3">게시글</span>
+          </div>
+          <div class="chipbox" data-z="주제 칩" style="left:16px;background:var(--ink)">
+            <div class="tx" style="color:#fff">순신이 산책</div>
+            <div class="cnt" style="background:var(--ink);border:1px solid var(--tint);color:#fff;line-height:18px">8</div>
+            <div class="newb" style="left:139px;top:2px">new</div>
+          </div>
+          <div class="chipbox" data-z="주제 칩" style="left:199px;background:#F0F0F0">
+            <div class="tx" style="color:var(--ink)">삐용이 물</div>
+            <div class="cnt" style="background:#fff;color:#7A7A7A">7</div>
+          </div>
+        </div>
+      </div>
+      <div class="statusbar" style="height:47px">
+        <div class="a" style="left:27px;top:14px;width:54px;text-align:center;font-family:var(--sys);font-weight:600;font-size:17px;line-height:21px;letter-spacing:-0.408px;color:#000">9:41</div>
+        <svg class="a" width="78.261" height="13" style="right:26px;top:18px" aria-hidden="true"><use href="#i-status"/></svg>
+      </div>
+      <div class="indicator"></div>
+    </div>
+  </section>
+
+  <section class="screen modal app" id="s-zsend" aria-label="John에게 간편 메세지 보내기">
+    <div class="z"><div class="mwrap">
+      <div class="dialog" style="width:340px;height:437px" role="dialog" aria-label="John에게 간편 메세지를 보낼까요?">
+        <div class="avatar40" data-z="John 프로필 사진"><img class="ph" src="img/09_zzumang-avatar.webp" alt=""></div>
+        <div class="mh" data-z="제목·안내 문구" style="left:71px;top:40px;display:flex;align-items:baseline;gap:5px"><span style="font-size:20px;letter-spacing:-0.2px">John</span><span style="font-size:18px;letter-spacing:-0.18px">에게</span></div>
+        <div class="mh" data-z="제목·안내 문구" style="left:71px;top:67.5px;font-size:18px;letter-spacing:-0.18px">간편 메세지를 보낼까요?</div>
+        <div class="msub" data-z="제목·안내 문구" style="left:71px;top:86px">보고싶은 친구를 가볍게 불러보세요:)</div>
+        <button class="switch" type="button" role="switch" aria-checked="true" id="zanon" aria-label="익명"><span class="ax"></span><span class="knob">익명</span></button>
+        <div class="tabtag" data-z="수집 탭" style="left:31px;top:127px;width:61px;padding:4px 12px 12px">수집</div>
+        <div class="box" data-z="칩 상자 빈 곳" style="left:31px;top:148px;height:137px">
+          <div class="chiprows" id="zchips">
+            <div><button class="chip sel" type="button" aria-pressed="true">다음 내용 궁금🙌</button><button class="chip" type="button" aria-pressed="false">하나 더!👀</button></div>
+            <div><button class="chip" type="button" aria-pressed="false">이 주제 좋다</button><button class="chip" type="button" aria-pressed="false">요즘 뭐해😲</button><button class="chip" type="button" aria-pressed="false">근황 궁금</button></div>
+            <div><button class="chip" type="button" aria-pressed="false">이번 주 어땠어</button><button class="chip" type="button" aria-pressed="false">이거 괜찮다</button></div>
+          </div>
+        </div>
+        <button class="mbtn dark" type="button" id="t-zsend" style="top:305px">네 이렇게 보낼래요</button>
+        <button class="mbtn light" type="button" id="t-zlater" style="top:365px">나중에 보낼래요</button>
+      </div>
+    </div></div>
+  </section>
+
+  <section class="screen modal app" id="s-zsent" aria-label="전송 완료">
+    <div class="z"><div class="mwrap">
+      <div class="dialog" style="width:338px;height:319px" role="dialog" aria-label="간편 메세지 전송을 완료했어요">
+        <img class="a" data-z="아이콘" src="img/25_icon-sent.webp" alt="" style="left:134px;top:49px;width:70px;height:70px;pointer-events:auto">
+        <div class="mh" data-z="제목·안내 문구" style="left:0;right:0;top:155.5px;text-align:center;font-size:18px;letter-spacing:-0.18px">간편 메세지 전송을 완료했어요</div>
+        <div class="msub" data-z="제목·안내 문구" style="left:0;right:0;top:174px;text-align:center">답장이 오면 알려드릴게요</div>
+        <button class="mbtn dark glowbtn" type="button" id="t-zok" style="top:248px">확인</button>
+      </div>
+    </div></div>
+  </section>
+
+  <!-- ================= ROUND 2 · POST (Figma 1:2824) ================= -->
+  <section class="screen app" id="s-post" aria-label="John 게시글">
+    <div class="z">
+      <div class="fill scroll" id="post-scroll">
+        <div class="a" style="left:0;top:0;width:390px;height:880px;background:var(--app-bg)">
+          <div data-z="상단 영역" class="a" style="left:0;top:47px;width:390px;height:52px;box-sizing:border-box;padding:0 16px 0 4px;display:flex;align-items:center;gap:4px">
+            <button type="button" id="t-pback" style="width:44px;height:44px;flex:none;border-radius:22px" aria-label="뒤로"><svg width="44" height="44" aria-hidden="true"><use href="#i-back"/></svg></button>
+            <div data-z="상단 제목" class="tabs23" style="line-height:22px;display:flex;align-items:center;gap:8px"><span>순신이 산책</span><span class="ptag" aria-label="게시물 8개">8</span></div>
+            <div class="a" style="left:203.5px;top:25.5px;width:122.5px;height:1.05px;background:#D3D1CD"></div>
+            <div data-z="John 프로필 사진" class="a" style="left:340px;top:10px;width:32px;height:32px;border-radius:80px;overflow:hidden;background:#fff"><img class="ph" src="img/09_zzumang-avatar.webp" alt=""></div>
+          </div>
+          <div class="a t2car" id="p-car1" style="left:0;top:107px;width:390px;height:301px">
+              <div class="counter c1 t2cnt" aria-live="polite"><b>1</b><em></em><i>3</i></div>
+              <div class="card main t2c" data-z="게시물 사진" data-i="0">
+              <img class="a" src="img/07_tape-bg.webp" alt="" style="left:0;top:-50.8px;width:358px;height:358px">
+              <img class="ph" src="img/08_zzumang-post.webp" alt="">
+              <div class="g-bottom" style="--c:109,132,41"></div>
+              <div class="counter" style="left:307px;top:20px;width:33px;height:20px"><b style="left:7px;top:3.5px">1</b><em style="left:16px;top:6px"></em><i style="left:20px;top:3.5px">3</i></div>
+              <div class="ctitle">굳세어라 산책day</div>
+              <div class="react" style="top:243px">💕 하트</div>
+            </div>
+              <div class="card main t2c" data-z="게시물 사진 2장" data-i="1"><img class="ph" src="img/45_john-walk-2c.webp" alt=""></div>
+              <div class="card main t2c" data-z="게시물 사진 3장" data-i="2"><img class="ph" src="img/43_john-walk-3.webp" alt=""></div>
+            </div>
+          <div class="a t13 nw" data-z="게시물 글" style="left:25px;top:400px;width:292px;overflow:hidden;text-overflow:ellipsis">순신이 데리고 근처 하천 산책 1시간 뛰었나? 오늘따라 컨디션이 매우 좋았음 내일도 나가봐야지</div>
+          <button type="button" id="t-more" class="a more nw" style="left:318px;top:398px;padding:2px 8px;border-radius:8px">더 보기</button>
+          <div class="a nw" data-z="게시물 글" style="left:25px;top:420px;width:340px;overflow:hidden;text-overflow:ellipsis"><span class="n14">Derek</span> <span class="t13">진짜 귀엽네 내일 중앙공원으로 감? 순신이 오면 나도 보러가게</span></div>
+          <div class="a ago nw" style="left:25px;top:440px">4분 전</div>
+          <div class="a t2car" id="p-car2" style="left:0;top:485px;width:390px;height:301px">
+              <div class="counter c1 t2cnt" aria-live="polite"><b>1</b><em></em><i>2</i></div>
+              <div class="card main t2c" data-z="다음 게시물" data-i="0">
+              <img class="ph" src="img/35_john-park.webp" alt="">
+              <div class="g-bottom" style="--c:70,90,60"></div>
+              <div class="counter c1"><b>1</b><em></em><i>2</i></div>
+              <div class="ctitle">중앙공원 한바퀴</div>
+              <div class="react" style="top:243px">💕 하트</div>
+            </div>
+              <div class="card main t2c" data-z="다음 게시물 2장" data-i="1"><img class="ph" src="img/46_john-park-2.webp" alt=""></div>
+            </div>
+          <div class="a t13" data-z="다음 게시물 글" style="left:25px;top:778px;width:340px">주말 아침 중앙공원 한 바퀴! 순신이는 오리 구경 삼매경</div>
+          <div class="a ago nw" style="left:25px;top:796px">1일 전</div>
+        </div>
+      </div>
+      <div class="statusbar" data-z="상태바" style="height:44px">
+        <div class="a" style="left:18px;top:12px;width:54px;text-align:center;font-family:var(--sys);font-weight:600;font-size:15px;line-height:20px;letter-spacing:-0.5px;color:#111">9:41</div>
+        <svg class="a" width="66.656" height="11.337" style="right:17.67px;top:16.33px" aria-hidden="true"><use href="#i-status"/></svg>
+      </div>
+      <div class="indicator"></div>
+    </div>
+  </section>
+
+  <!-- ================= ROUND 2 · POST EXPANDED (Figma 1:3158 / 1:3305) ================= -->
+  <section class="screen app" id="s-postopen" aria-label="John 게시글 펼침">
+    <div class="z">
+      <div class="fill scroll" id="postopen-scroll">
+        <div style="position:relative;width:390px;background:var(--app-bg);padding-bottom:200px">
+          <div style="position:relative;height:465px">
+            <div data-z="상단 영역" class="a" style="left:0;top:47px;width:390px;height:52px;box-sizing:border-box;padding:0 16px 0 4px;display:flex;align-items:center;gap:4px">
+            <button type="button" id="t-oback" style="width:44px;height:44px;flex:none;border-radius:22px" aria-label="뒤로"><svg width="44" height="44" aria-hidden="true"><use href="#i-back"/></svg></button>
+            <div data-z="상단 제목" class="tabs23" style="line-height:22px;display:flex;align-items:center;gap:8px"><span>순신이 산책</span><span class="ptag" aria-label="게시물 8개">8</span></div>
+            <div class="a" style="left:203.5px;top:25.5px;width:122.5px;height:1.05px;background:#D3D1CD"></div>
+            <div data-z="John 프로필 사진" class="a" style="left:340px;top:10px;width:32px;height:32px;border-radius:80px;overflow:hidden;background:#fff"><img class="ph" src="img/09_zzumang-avatar.webp" alt=""></div>
+          </div>
+            <div class="a t2car" id="po-car1" style="left:0;top:107px;width:390px;height:301px">
+              <div class="counter c1 t2cnt" aria-live="polite"><b>1</b><em></em><i>3</i></div>
+              <div class="card main t2c" data-z="게시물 사진" data-i="0">
+              <img class="a" src="img/07_tape-bg.webp" alt="" style="left:0;top:-50.8px;width:358px;height:358px">
+              <img class="ph" src="img/08_zzumang-post.webp" alt="">
+              <div class="g-bottom" style="--c:109,132,41"></div>
+              <div class="counter" style="left:307px;top:20px;width:33px;height:20px"><b style="left:7px;top:3.5px">1</b><em style="left:16px;top:6px"></em><i style="left:20px;top:3.5px">3</i></div>
+              <div class="ctitle">굳세어라 산책day</div>
+              <div class="react" style="top:243px">💕 하트</div>
+            </div>
+              <div class="card main t2c" data-z="게시물 사진 2장" data-i="1"><img class="ph" src="img/45_john-walk-2c.webp" alt=""></div>
+              <div class="card main t2c" data-z="게시물 사진 3장" data-i="2"><img class="ph" src="img/43_john-walk-3.webp" alt=""></div>
+            </div>
+            <div class="a t13" data-z="게시물 글" style="left:25px;top:400px;width:340px;word-break:keep-all">순신이 데리고 근처 하천 산책 1시간 뛰었나? 오늘따라 컨디션이 매우 좋았음 내일도 나가봐야지</div>
+            <div class="a ago nw" style="left:25px;top:436px">4분 전</div>
+          </div>
+          <div class="cbar" data-z="댓글 바">
+            <div class="a" style="left:17px;top:0;width:357px;height:1px;background:#D6D6D6"></div>
+            <button type="button" id="t-comment" class="a" style="left:13px;top:9px;height:32px;padding:0 6px;border-radius:8px;display:flex;align-items:center;gap:6px" aria-label="댓글 쓰기">
+              <svg width="17" height="17" style="overflow:visible" aria-hidden="true"><use href="#i-comment"/></svg>
+              <span id="ccount" style="font-weight:600;font-size:14px;line-height:1.5;letter-spacing:-0.35px;color:#000">23</span>
+            </button>
+            <button type="button" id="t-cfold" class="a" style="left:338px;top:1px;width:48px;height:48px;display:flex;align-items:center;justify-content:center" aria-label="댓글 접기" aria-expanded="true"><svg width="24" height="24" viewBox="0 0 24 24" style="transition:transform .2s" aria-hidden="true"><path d="M5 15.5L12 8.5L19 15.5" stroke="#121212" fill="none"/></svg></button>
+          </div>
+          <div id="comments" data-z="댓글 목록" style="display:flex;flex-direction:column;gap:16px;padding:8px 0 4px">
+              <div class="cmt" data-z="댓글"><div class="av"><img src="img/10_derek-avatar.webp" alt=""></div><div class="body"><div class="head"><span class="cm-name">Derek</span><span class="cm-ago">1분</span><span class="lk"><svg width="10.667" height="9.787" aria-hidden="true"><use href="#i-heart"/></svg>4</span></div><div class="text">진짜 귀엽네 내일 중앙공원으로 감? 순신이 오면 나도 보러가게</div></div></div>
+              <div class="cmt" data-z="댓글"><div class="av" style="background:#B4B4B4"></div><div class="body"><div class="head"><span class="cm-name">Toby</span><span class="cm-ago">2분</span><span class="lk"><svg width="10.667" height="9.787" aria-hidden="true"><use href="#i-heart"/></svg>4</span></div><div class="text">하천 산책로 꽃 핀 거 실화야? 다음 주에 나도 그쪽으로 가볼래</div></div></div>
+              <div class="cmt" data-z="댓글"><div class="av"><img src="img/11_hasha-avatar.webp" alt=""></div><div class="body"><div class="head"><span class="cm-name">HaSha</span><span class="cm-ago">3분</span><span class="lk"><svg width="10.667" height="9.787" aria-hidden="true"><use href="#i-heart"/></svg>1</span></div><div class="text">순신이 사진 더 올려줘 귀여운 거 안올려주면 불법이야ㅠ</div></div></div>
+              <div class="cmt" data-z="댓글"><div class="av" style="background:#6A6A6A"></div><div class="body"><div class="head"><span class="cm-name">yuna_</span><span class="cm-ago">4분</span><span class="lk"><svg width="10.667" height="9.787" aria-hidden="true"><use href="#i-heart"/></svg>1</span></div><div class="text">순신이 뛰는 거 영상으로도 보고 싶다ㅠㅠ 다음엔 영상도 올려줘</div></div></div>
+          </div>
+          <div style="position:relative;height:360px;margin-top:24px">
+            <div class="a t2car" id="po-car2" style="left:0;top:0px;width:390px;height:301px">
+              <div class="counter c1 t2cnt" aria-live="polite"><b>1</b><em></em><i>2</i></div>
+              <div class="card main t2c" data-z="다음 게시물" data-i="0">
+              <img class="ph" src="img/35_john-park.webp" alt="">
+              <div class="g-bottom" style="--c:70,90,60"></div>
+              <div class="counter c1"><b>1</b><em></em><i>2</i></div>
+              <div class="ctitle">중앙공원 한바퀴</div>
+              <div class="react" style="top:243px">💕 하트</div>
+            </div>
+              <div class="card main t2c" data-z="다음 게시물 2장" data-i="1"><img class="ph" src="img/46_john-park-2.webp" alt=""></div>
+            </div>
+            <div class="a t13" data-z="다음 게시물 글" style="left:25px;top:293px;width:340px">주말 아침 중앙공원 한 바퀴! 순신이는 오리 구경 삼매경</div>
+            <div class="a ago nw" style="left:25px;top:311px">1일 전</div>
+          </div>
+        </div>
+      </div>
+      <div class="statusbar" data-z="상태바" style="height:44px">
+        <div class="a" style="left:18px;top:12px;width:54px;text-align:center;font-family:var(--sys);font-weight:600;font-size:15px;line-height:20px;letter-spacing:-0.5px;color:#111">9:41</div>
+        <svg class="a" width="66.656" height="11.337" style="right:17.67px;top:16.33px" aria-hidden="true"><use href="#i-status"/></svg>
+      </div>
+      <div class="indicator"></div>
+    </div>
+  </section>
+
+  <section class="screen modal app" id="s-compose" aria-label="댓글 쓰기">
+    <div class="composer" id="composer">
+      <div class="emojis" data-z="이모지 줄">
+        <button type="button" class="emo" aria-label="❤️">❤️</button><button type="button" class="emo" aria-label="🙌">🙌</button><button type="button" class="emo" aria-label="🔥">🔥</button><button type="button" class="emo" aria-label="👏">👏</button><button type="button" class="emo" aria-label="😢">😢</button><button type="button" class="emo" aria-label="😍">😍</button><button type="button" class="emo" aria-label="😮">😮</button><button type="button" class="emo" aria-label="😂">😂</button>
+      </div>
+      <div class="row">
+        <div class="me" data-z="내 프로필 사진"><svg width="22" height="22" aria-hidden="true"><use href="#i-person"/></svg></div>
+        <div class="cfield" data-z="댓글 입력칸">
+          <input id="cinput" type="text" maxlength="200" autocomplete="off" enterkeyhint="send" placeholder="John 님에게 댓글 달기..." aria-label="댓글 입력">
+          <button type="button" id="t-csend" class="csend" disabled aria-label="보내기"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5.5 11.5L12 5l6.5 6.5" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= TASK 2: 리마인드 알림 확인 ================= -->
+  <section class="screen scroll" id="s-m4"></section>
+  <section class="screen app" id="s-t2home" aria-label="태스크 2 홈">
+    <div class="z" id="t2-z">
+      <div class="fill scroll" id="t2-scroll"><div class="t2page" id="t2-page">
+      <div class="t2canvas" id="t2-canvas">
+        <div class="a" style="left:0;top:0;width:390px;height:1540px;background:var(--app-bg)">
+          <div data-z="알림 배너" id="t2-banner" class="a" style="left:16px;top:50px;width:358px;height:88px;box-sizing:border-box;padding:0 12px;display:flex;align-items:center;gap:14px;background:#fff;border-radius:24px;box-shadow:0 2px 10px rgba(0,0,0,0.06)">
+            <img src="img/27_my-post.webp" alt="" style="flex:none;display:block;width:64px;height:64px;object-fit:cover;border-radius:16px">
+            <span style="flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:3px">
+              <span style="font-size:12px;line-height:16px;font-weight:500;color:#6B6B6B;letter-spacing:-0.1px;white-space:nowrap">내 게시물 · 빈티지 디오라마</span>
+              <span style="font-size:15px;line-height:21px;font-weight:500;letter-spacing:-0.3px;white-space:nowrap">친구 홈에 <b style="font-weight:700">3번</b> 리마인드됐어요</span>
+            </span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8A8A8A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none"><polyline points="9 6 15 12 9 18"></polyline></svg>
+          </div>
+          <div class="a" id="t2-body" style="left:0;top:0;width:390px;height:1540px">
+          <!-- category tabs -->
+          <div class="a" style="left:0;top:110px;width:390px;height:52px;box-sizing:border-box;padding:0 16px;display:flex;align-items:center;justify-content:space-between">
+            <div data-z="카테고리 탭" class="tabs23 t2tabs" id="t2-tabs" style="line-height:1.5"><span data-cat="수집/빈티지">수집/빈티지</span><span data-cat="다꾸" style="color:#C4C4C4">다꾸</span><span data-cat="반려동물">반려동물</span></div>
+            <svg data-z="카테고리 더보기" width="34" height="34" aria-hidden="true"><use href="#i-more"/></svg>
+          </div>
+
+          <!-- remind: Clare -->
+          <div data-z="리마인드 영역" id="t2-remind" class="a" style="left:0;top:190px;width:390px;height:385px;overflow:hidden">
+            <div class="a" style="left:20px;top:0;display:flex;gap:4px;align-items:flex-start"><span class="h20">이런 순간이 있었네요</span><span class="remind">Remind</span></div>
+            <div class="a t2car" id="t2-car" style="left:0;top:36px;width:390px;height:301px">
+              <div class="counter c1 t2cnt" id="t2-cnt" aria-live="polite"><b>1</b><em></em><i>3</i></div>
+              <!-- 두드리기: 카드를 넘겨도 같은 자리에 떠 있음 -->
+              <button class="fab hknock" type="button" id="t2-knock" data-z="Clare 두드리기" style="left:306px;top:214px;width:56px;height:56px;z-index:6" aria-label="두드리기"><svg class="a" width="35" height="35" style="left:10.5px;top:11px" aria-hidden="true"><use href="#i-knock"/></svg></button>
+              <div data-z="Clare 게시물" class="card main t2c" data-i="0">
+                <img class="a" src="img/16_mintcho-switch.webp" alt="" style="left:-29px;top:-172px;width:387px;height:516px;object-fit:cover">
+                <div class="g-bottom" style="--c:115,115,115"></div>
+                <button class="who" type="button" style="left:8px;top:14px;padding:4px 8px 4px 4px;border-radius:20px" aria-label="Clare 프로필 보기">
+                  <span style="position:relative;width:30px;height:30px;border-radius:75px;overflow:hidden;background:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,0.3);flex:none">
+                    <img class="a" src="img/17_clare-photo.webp" alt="" style="left:-1.75px;top:-11.5px;width:32.162px;height:57.157px;object-fit:cover">
+                  </span>
+                  <span>Clare</span>
+                </button>
+                <div class="counter c1"><b>1</b><em></em><i>3</i></div>
+                <div class="ctitle">민초템 꾸꾸</div>
+                <div class="t2rx" id="t2-rx"></div>
+              </div>
+              <div data-z="Clare 게시물 2장" class="card main t2c" data-i="1"><img class="ph" src="img/34_clare-post-3b.webp" alt=""><div class="counter c1"><b>2</b><em></em><i>3</i></div></div>
+              <div data-z="Clare 게시물 3장" class="card main t2c" data-i="2"><img class="ph" src="img/33_clare-post-2b.webp" alt=""><div class="counter c1"><b>3</b><em></em><i>3</i></div></div>
+            </div>
+            <div class="t2fx" id="t2-fx" aria-hidden="true"></div>
+            <div class="t2rbar" id="t2-rbar" role="group" aria-label="간편 반응" hidden><div class="t2rrow"><button type="button" class="t2rchip" data-e="💕" data-l="하트">💕 하트</button><button type="button" class="t2rchip" data-e="💪" data-l="공감">💪 공감</button><button type="button" class="t2rchip" data-e="👀" data-l="궁금">👀 궁금</button><button type="button" class="t2rchip" data-e="😆" data-l="웃김">😆 웃김</button><button type="button" class="t2rchip" data-e="😫" data-l="으악">😫 으악</button><button type="button" class="t2rchip" data-e="🤤" data-l="동의">🤤 동의</button><button type="button" class="t2rchip" data-e="👏" data-l="응원">👏 응원</button></div></div>
+            <div data-z="Clare 게시물 글" class="a t13 cy nw t2fold" style="left:25px;top:339px;overflow:hidden;text-overflow:ellipsis;width:296px">스위치에 새로운 캡 달았는데 어때요 #민초맛캡 민트 캡이랑...</div>
+            <div data-z="더 보기" id="t2-more" role="button" tabindex="0" class="a more cy nw t2fold t2more" style="left:326px;top:339px;cursor:pointer">더 보기</div>
+            <div id="t2-pname" class="a n14 nw t2fold t2pname" style="left:25px;top:348px">mybossmn</div>
+            <div id="t2-ptext" class="a t13 nw t2fold t2ptext" style="left:98px;top:349px;max-width:270px;overflow:hidden;text-overflow:ellipsis">ㅋㅋㅋㅋ나도 사줘</div>
+            <div class="a ago nw t2fold t2ago" style="left:25px;top:368px">4일 전</div>
+            <div id="t2-open" class="a t2open" hidden style="left:0;top:334px;width:390px">
+              <div class="t13" data-z="게시물 글 (펼침)" style="padding:0 25px;word-break:keep-all">스위치에 새로운 캡 달았는데 어때요 #민초맛캡 민트 캡이랑 같이 끼우니까 색 조합이 너무 귀여워서 한참 들여다봄</div>
+              <div class="ago" style="padding:4px 25px 12px">4일 전</div>
+              <div class="cbar" data-z="댓글 바">
+                <div class="a" style="left:17px;top:0;width:357px;height:1px;background:#D6D6D6"></div>
+                <button type="button" id="t2-comment" class="a t2cbtn" style="left:13px;top:9px;height:32px;padding:0 6px;border-radius:8px;display:flex;align-items:center;gap:6px" aria-label="댓글 쓰기">
+                  <svg width="17" height="17" style="overflow:visible" aria-hidden="true"><use href="#i-comment"/></svg>
+                  <span id="t2-ccount" class="t2ccount" style="font-weight:600;font-size:14px;line-height:1.5;letter-spacing:-0.35px;color:#000">4</span>
+                </button>
+                <button type="button" id="t2-fold" class="a t2foldbtn" style="left:338px;top:1px;width:48px;height:48px;display:flex;align-items:center;justify-content:center" aria-label="접기"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 15.5L12 8.5L19 15.5" stroke="#121212" fill="none"/></svg></button>
+              </div>
+              <div id="t2-comments" class="t2comments" data-z="댓글 목록" style="display:flex;flex-direction:column;gap:16px;padding:8px 0 4px">
+                <div class="cmt" data-z="댓글"><div class="av" style="background:#9A9A9A"></div><div class="body"><div class="head"><span class="cm-name">mybossmn</span><span class="cm-ago">2일</span><span class="lk"><svg width="10.667" height="9.787" aria-hidden="true"><use href="#i-heart"/></svg>2</span></div><div class="text">ㅋㅋㅋㅋ나도 사줘</div></div></div>
+                <div class="cmt reply" data-z="답글"><div class="av"><img src="img/17_clare-photo.webp" alt=""></div><div class="body"><div class="head"><span class="cm-name">Clare</span><span class="cm-ago">2일</span></div><div class="text"><span class="mention">@mybossmn</span> 다음에 같이 사러 가자ㅋㅋ 너도 민트 캡 잘 어울릴 듯</div></div></div>
+                <div class="cmt" data-z="댓글"><div class="av" style="background:#C4C4C4"></div><div class="body"><div class="head"><span class="cm-name">lumi_desk</span><span class="cm-ago">3일</span><span class="lk"><svg width="10.667" height="9.787" aria-hidden="true"><use href="#i-heart"/></svg>1</span></div><div class="text">캡 어디서 샀어요? 링크 공유 부탁드려요!</div></div></div>
+                <div class="cmt" data-z="댓글"><div class="av" style="background:#6E6E6E"></div><div class="body"><div class="head"><span class="cm-name">sooah.toy</span><span class="cm-ago">4일</span><span class="lk"><svg width="10.667" height="9.787" aria-hidden="true"><use href="#i-heart"/></svg>1</span></div><div class="text">민트에 딸기 조합 미쳤다 저도 따라 해볼래요</div></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- new posts (Figma 1:484) -->
+          <div data-z="새 게시물 영역" id="t2-new" class="a" style="left:0;top:607px;width:390px;height:760px;overflow:hidden">
+            <div class="a h20" style="left:20px;top:0">새로운 게시물을 확인해보세요</div>
+
+            <!-- maka -->
+            <div class="a t2post" id="t2-p-maka" data-base="350" style="left:0;top:0px;width:390px;overflow:hidden">
+            <div class="a t2car" style="left:0;top:0;width:390px;height:301px">
+              <div class="counter c1 t2cnt" aria-live="polite"><b>1</b><em></em><i>2</i></div>
+              <div data-z="maka 게시물" class="card main t2c" data-i="0">
+                <img class="ph" src="img/30_maka-post-2.webp" alt="">
+                <div class="g-bottom" style="--c:187,136,139"></div>
+                <div class="who"><img class="av" src="img/03_maka-avatar.webp" alt=""><span>maka</span></div>
+                <div class="counter c1"><b>1</b><em></em><i>2</i></div>
+                <div class="ctitle">오늘도 고전템</div>
+                <div class="t2rx"><div data-z="maka 반응 버튼" class="react" style="top:243px">💕 하트</div></div>
+              </div>
+              <div data-z="maka 게시물 2장" class="card main t2c" data-i="1"><img class="a" src="img/02_maka-post.webp" alt="" style="left:-12px;top:-69px;width:424px;height:421px;object-fit:cover"><div class="counter c1"><b>2</b><em></em><i>2</i></div></div>
+            </div>
+            <div class="t2fx" aria-hidden="true"></div>
+            <div class="t2rbar" role="group" aria-label="간편 반응" hidden style="top:166px"><div class="t2rrow"><button type="button" class="t2rchip" data-e="💕" data-l="하트">💕 하트</button><button type="button" class="t2rchip" data-e="💪" data-l="공감">💪 공감</button><button type="button" class="t2rchip" data-e="👀" data-l="궁금">👀 궁금</button><button type="button" class="t2rchip" data-e="😆" data-l="웃김">😆 웃김</button><button type="button" class="t2rchip" data-e="😫" data-l="으악">😫 으악</button><button type="button" class="t2rchip" data-e="🤤" data-l="동의">🤤 동의</button><button type="button" class="t2rchip" data-e="👏" data-l="응원">👏 응원</button></div></div>
+            <div data-z="maka 게시물 글" class="a t13 nw t2fold" style="left:25px;top:294px;overflow:hidden;text-overflow:ellipsis;width:296px">#동대문헬로키티 #클로버잔뜩 동생이랑 동대문 잡화점 들...</div>
+            <div data-z="더 보기" role="button" tabindex="0" class="a more cy nw t2fold t2more" style="left:326px;top:303px;cursor:pointer">더 보기</div>
+            <div class="a n14 nw t2fold t2pname" style="left:25px;top:313px">hana.k</div>
+            <div class="a t13 nw t2fold t2ptext" style="left:76px;top:315px;max-width:289px;overflow:hidden;text-overflow:ellipsis">키티 밑에 클로버 키링 가격 궁금해요🥹 넘 예뻐...</div>
+            <div class="a ago nw t2fold t2ago" style="left:25px;top:333px">13초 전</div>
+            <div class="a t2open" hidden style="left:0;top:299px;width:390px">
+              <div class="t13" data-z="게시물 글 (펼침)" style="padding:0 25px;word-break:keep-all">#동대문헬로키티 #클로버잔뜩 동생이랑 동대문 잡화점 들렀다가 키링을 잔뜩 데려왔어요🍀 클로버 들어간 건 다 예뻐 보여서 고르느라 한참 걸렸어요</div>
+              <div class="ago" style="padding:4px 25px 12px">13초 전</div>
+              <div class="cbar" data-z="댓글 바">
+                <div class="a" style="left:17px;top:0;width:357px;height:1px;background:#D6D6D6"></div>
+                <button type="button" class="a t2cbtn" style="left:13px;top:9px;height:32px;padding:0 6px;border-radius:8px;display:flex;align-items:center;gap:6px" aria-label="댓글 쓰기">
+                  <svg width="17" height="17" style="overflow:visible" aria-hidden="true"><use href="#i-comment"/></svg>
+                  <span class="t2ccount" style="font-weight:600;font-size:14px;line-height:1.5;letter-spacing:-0.35px;color:#000">1</span>
+                </button>
+                <button type="button" class="a t2foldbtn" style="left:338px;top:1px;width:48px;height:48px;display:flex;align-items:center;justify-content:center" aria-label="접기"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 15.5L12 8.5L19 15.5" stroke="#121212" fill="none"/></svg></button>
+              </div>
+              <div class="t2comments" data-z="댓글 목록" style="display:flex;flex-direction:column;gap:16px;padding:8px 0 4px">
+                <div class="cmt" data-z="댓글"><div class="av" style="background:#9A9A9A"></div><div class="body"><div class="head"><span class="cm-name">hana.k</span><span class="cm-ago">방금</span></div><div class="text">키티 밑에 클로버 키링 가격 궁금해요🥹 넘 예뻐요</div></div></div>
+              </div>
+            </div>
+          </div>
+
+            <!-- dami.log -->
+            <div class="a t2post" id="t2-p-d1" data-base="329.86" style="left:0;top:0px;width:390px;overflow:hidden">
+            <div class="a t2car" style="left:0;top:0;width:390px;height:301px">
+              <div class="counter c1 t2cnt" aria-live="polite" hidden><b>1</b><em></em><i>1</i></div>
+              <div data-z="dami.log 게시물" class="card main t2c" data-i="0">
+                <div class="g-bottom" style="--c:115,115,115"></div>
+                <div class="who"><i class="av" style="display:block;background:#D9D9D9"></i><span>dami.log</span></div>
+                <div class="counter c1"><b>1</b><em></em><i>1</i></div>
+                <div class="ctitle">10월 다이어리</div>
+                <div class="t2rx"><div data-z="dami.log 반응 버튼" class="react" style="top:243px">💕 하트</div></div>
+              </div>
+            </div>
+            <div class="t2fx" aria-hidden="true"></div>
+            <div class="t2rbar" role="group" aria-label="간편 반응" hidden style="top:166px"><div class="t2rrow"><button type="button" class="t2rchip" data-e="💕" data-l="하트">💕 하트</button><button type="button" class="t2rchip" data-e="💪" data-l="공감">💪 공감</button><button type="button" class="t2rchip" data-e="👀" data-l="궁금">👀 궁금</button><button type="button" class="t2rchip" data-e="😆" data-l="웃김">😆 웃김</button><button type="button" class="t2rchip" data-e="😫" data-l="으악">😫 으악</button><button type="button" class="t2rchip" data-e="🤤" data-l="동의">🤤 동의</button><button type="button" class="t2rchip" data-e="👏" data-l="응원">👏 응원</button></div></div>
+            <div data-z="dami.log 게시물 글" class="a t13 nw t2fold" style="left:25px;top:293.86px;overflow:hidden;text-overflow:ellipsis;width:296px">새로 산 체크 마스킹테이프로 10월 다이어리 꾸몄어요 아껴두던 스티커도 결국 다 써버림 #다꾸 #10월다이어리</div>
+            <div data-z="더 보기" role="button" tabindex="0" class="a more cy nw t2fold t2more" style="left:326px;top:302.86px;cursor:pointer">더 보기</div>
+            <div class="a n14 nw t2fold t2pname" hidden style="left:25px;top:312.86px"></div>
+            <div class="a t13 nw t2fold t2ptext" hidden style="left:76px;top:314.86px;max-width:289px;overflow:hidden;text-overflow:ellipsis"></div>
+            <div class="a ago nw t2fold t2ago" style="left:25px;top:312.86px">40초 전</div>
+            <div class="a t2open" hidden style="left:0;top:298.86px;width:390px">
+              <div class="t13" data-z="게시물 글 (펼침)" style="padding:0 25px;word-break:keep-all">새로 산 체크 마스킹테이프로 10월 다이어리 꾸몄어요 아껴두던 스티커도 결국 다 써버림 #다꾸 #10월다이어리</div>
+              <div class="ago" style="padding:4px 25px 12px">40초 전</div>
+              <div class="cbar" data-z="댓글 바">
+                <div class="a" style="left:17px;top:0;width:357px;height:1px;background:#D6D6D6"></div>
+                <button type="button" class="a t2cbtn" style="left:13px;top:9px;height:32px;padding:0 6px;border-radius:8px;display:flex;align-items:center;gap:6px" aria-label="댓글 쓰기">
+                  <svg width="17" height="17" style="overflow:visible" aria-hidden="true"><use href="#i-comment"/></svg>
+                  <span class="t2ccount" style="font-weight:600;font-size:14px;line-height:1.5;letter-spacing:-0.35px;color:#000">0</span>
+                </button>
+                <button type="button" class="a t2foldbtn" style="left:338px;top:1px;width:48px;height:48px;display:flex;align-items:center;justify-content:center" aria-label="접기"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 15.5L12 8.5L19 15.5" stroke="#121212" fill="none"/></svg></button>
+              </div>
+              <div class="t2comments" data-z="댓글 목록" style="display:flex;flex-direction:column;gap:16px;padding:8px 0 4px">
+              </div>
+            </div>
+          </div>
+
+            <!-- Yeeun -->
+            <div class="a t2post" id="t2-p-yeeun" data-base="329.86" style="left:0;top:0px;width:390px;overflow:hidden">
+            <div class="a t2car" style="left:0;top:0;width:390px;height:301px">
+              <div class="counter c1 t2cnt" aria-live="polite"><b>1</b><em></em><i>3</i></div>
+              <div data-z="Yeeun 게시물" class="card main t2c" data-i="0">
+                <img class="ph" src="img/31_yeeun-post-2.webp" alt="">
+                <div class="g-bottom" style="--c:223,205,159"></div>
+                <div class="who"><img class="av" src="img/06_yeeun-avatar.webp" alt=""><span>Yeeun</span></div>
+                <div class="counter c1"><b>1</b><em></em><i>3</i></div>
+                <div class="ctitle">주간 그릇무덤</div>
+                <div class="t2rx"><div data-z="Yeeun 반응 버튼" class="react" style="top:243px">💕 하트</div></div>
+              </div>
+              <div data-z="Yeeun 게시물 2장" class="card main t2c" data-i="1"><img class="ph" src="img/32_yeeun-post-3.webp" alt=""><div class="counter c1"><b>2</b><em></em><i>3</i></div></div>
+              <div data-z="Yeeun 게시물 3장" class="card main t2c" data-i="2"><img class="a" src="img/05_yeeun-post.webp" alt="" style="left:-53px;top:-173px;width:443px;height:543px;object-fit:cover"><div class="counter c1"><b>3</b><em></em><i>3</i></div></div>
+            </div>
+            <div class="t2fx" aria-hidden="true"></div>
+            <div class="t2rbar" role="group" aria-label="간편 반응" hidden style="top:166px"><div class="t2rrow"><button type="button" class="t2rchip" data-e="💕" data-l="하트">💕 하트</button><button type="button" class="t2rchip" data-e="💪" data-l="공감">💪 공감</button><button type="button" class="t2rchip" data-e="👀" data-l="궁금">👀 궁금</button><button type="button" class="t2rchip" data-e="😆" data-l="웃김">😆 웃김</button><button type="button" class="t2rchip" data-e="😫" data-l="으악">😫 으악</button><button type="button" class="t2rchip" data-e="🤤" data-l="동의">🤤 동의</button><button type="button" class="t2rchip" data-e="👏" data-l="응원">👏 응원</button></div></div>
+            <div data-z="Yeeun 게시물 글" class="a t13 nw t2fold" style="left:25px;top:293.86px;overflow:hidden;text-overflow:ellipsis;width:296px">52번째 컵 들였습니다 컵 사는 거 어떻게 참아요 #빈티지그...</div>
+            <div data-z="더 보기" role="button" tabindex="0" class="a more cy nw t2fold t2more" style="left:326px;top:302.86px;cursor:pointer">더 보기</div>
+            <div class="a n14 nw t2fold t2pname" hidden style="left:25px;top:312.86px"></div>
+            <div class="a t13 nw t2fold t2ptext" hidden style="left:76px;top:314.86px;max-width:289px;overflow:hidden;text-overflow:ellipsis"></div>
+            <div class="a ago nw t2fold t2ago" style="left:25px;top:312.86px">1분 전</div>
+            <div class="a t2open" hidden style="left:0;top:298.86px;width:390px">
+              <div class="t13" data-z="게시물 글 (펼침)" style="padding:0 25px;word-break:keep-all">52번째 컵 들였습니다 컵 사는 거 어떻게 참아요 #빈티지그릇 #컵수집 이번 건 곰돌이 무늬가 너무 귀여워서 보자마자 데려왔어요</div>
+              <div class="ago" style="padding:4px 25px 12px">1분 전</div>
+              <div class="cbar" data-z="댓글 바">
+                <div class="a" style="left:17px;top:0;width:357px;height:1px;background:#D6D6D6"></div>
+                <button type="button" class="a t2cbtn" style="left:13px;top:9px;height:32px;padding:0 6px;border-radius:8px;display:flex;align-items:center;gap:6px" aria-label="댓글 쓰기">
+                  <svg width="17" height="17" style="overflow:visible" aria-hidden="true"><use href="#i-comment"/></svg>
+                  <span class="t2ccount" style="font-weight:600;font-size:14px;line-height:1.5;letter-spacing:-0.35px;color:#000">0</span>
+                </button>
+                <button type="button" class="a t2foldbtn" style="left:338px;top:1px;width:48px;height:48px;display:flex;align-items:center;justify-content:center" aria-label="접기"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 15.5L12 8.5L19 15.5" stroke="#121212" fill="none"/></svg></button>
+              </div>
+              <div class="t2comments" data-z="댓글 목록" style="display:flex;flex-direction:column;gap:16px;padding:8px 0 4px">
+              </div>
+            </div>
+          </div>
+
+            <!-- maka (같은 작성자) -->
+            <div class="a t2post" id="t2-p-d2" data-base="329.86" style="left:0;top:0px;width:390px;overflow:hidden">
+            <div class="a t2car" style="left:0;top:0;width:390px;height:301px">
+              <div class="counter c1 t2cnt" aria-live="polite"><b>1</b><em></em><i>4</i></div>
+              <div data-z="maka 게시물" class="card main t2c" data-i="0">
+                <div class="g-bottom" style="--c:115,115,115"></div>
+                <div class="who"><img class="av" src="img/03_maka-avatar.webp" alt=""><span>maka</span></div>
+                <div class="counter c1"><b>1</b><em></em><i>4</i></div>
+                <div class="ctitle">스티커 하울</div>
+                <div class="t2rx"><div data-z="maka 반응 버튼" class="react" style="top:243px">💕 하트</div></div>
+              </div>
+              <div data-z="maka 게시물 2장" class="card main t2c t2gray" data-i="1"><div class="counter c1"><b>2</b><em></em><i>4</i></div></div>
+              <div data-z="maka 게시물 3장" class="card main t2c t2gray" data-i="2"><div class="counter c1"><b>3</b><em></em><i>4</i></div></div>
+              <div data-z="maka 게시물 4장" class="card main t2c t2gray" data-i="3"><div class="counter c1"><b>4</b><em></em><i>4</i></div></div>
+            </div>
+            <div class="t2fx" aria-hidden="true"></div>
+            <div class="t2rbar" role="group" aria-label="간편 반응" hidden style="top:166px"><div class="t2rrow"><button type="button" class="t2rchip" data-e="💕" data-l="하트">💕 하트</button><button type="button" class="t2rchip" data-e="💪" data-l="공감">💪 공감</button><button type="button" class="t2rchip" data-e="👀" data-l="궁금">👀 궁금</button><button type="button" class="t2rchip" data-e="😆" data-l="웃김">😆 웃김</button><button type="button" class="t2rchip" data-e="😫" data-l="으악">😫 으악</button><button type="button" class="t2rchip" data-e="🤤" data-l="동의">🤤 동의</button><button type="button" class="t2rchip" data-e="👏" data-l="응원">👏 응원</button></div></div>
+            <div data-z="maka 게시물 글" class="a t13 nw t2fold" style="left:25px;top:293.86px;overflow:hidden;text-overflow:ellipsis;width:296px">문구 페어 다녀왔어요 고르고 골라도 결국 한가득이라 하나씩 소개해볼게요 #스티커하울 #다꾸러</div>
+            <div data-z="더 보기" role="button" tabindex="0" class="a more cy nw t2fold t2more" style="left:326px;top:302.86px;cursor:pointer">더 보기</div>
+            <div class="a n14 nw t2fold t2pname" hidden style="left:25px;top:312.86px"></div>
+            <div class="a t13 nw t2fold t2ptext" hidden style="left:76px;top:314.86px;max-width:289px;overflow:hidden;text-overflow:ellipsis"></div>
+            <div class="a ago nw t2fold t2ago" style="left:25px;top:312.86px">3분 전</div>
+            <div class="a t2open" hidden style="left:0;top:298.86px;width:390px">
+              <div class="t13" data-z="게시물 글 (펼침)" style="padding:0 25px;word-break:keep-all">문구 페어 다녀왔어요 고르고 골라도 결국 한가득이라 하나씩 소개해볼게요 #스티커하울 #다꾸러</div>
+              <div class="ago" style="padding:4px 25px 12px">3분 전</div>
+              <div class="cbar" data-z="댓글 바">
+                <div class="a" style="left:17px;top:0;width:357px;height:1px;background:#D6D6D6"></div>
+                <button type="button" class="a t2cbtn" style="left:13px;top:9px;height:32px;padding:0 6px;border-radius:8px;display:flex;align-items:center;gap:6px" aria-label="댓글 쓰기">
+                  <svg width="17" height="17" style="overflow:visible" aria-hidden="true"><use href="#i-comment"/></svg>
+                  <span class="t2ccount" style="font-weight:600;font-size:14px;line-height:1.5;letter-spacing:-0.35px;color:#000">0</span>
+                </button>
+                <button type="button" class="a t2foldbtn" style="left:338px;top:1px;width:48px;height:48px;display:flex;align-items:center;justify-content:center" aria-label="접기"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 15.5L12 8.5L19 15.5" stroke="#121212" fill="none"/></svg></button>
+              </div>
+              <div class="t2comments" data-z="댓글 목록" style="display:flex;flex-direction:column;gap:16px;padding:8px 0 4px">
+              </div>
+            </div>
+          </div>
+
+            <!-- Yeeun (같은 작성자) -->
+            <div class="a t2post" id="t2-p-d3" data-base="329.86" style="left:0;top:0px;width:390px;overflow:hidden">
+            <div class="a t2car" style="left:0;top:0;width:390px;height:301px">
+              <div class="counter c1 t2cnt" aria-live="polite"><b>1</b><em></em><i>5</i></div>
+              <div data-z="Yeeun 게시물" class="card main t2c" data-i="0">
+                <div class="g-bottom" style="--c:115,115,115"></div>
+                <div class="who"><img class="av" src="img/06_yeeun-avatar.webp" alt=""><span>Yeeun</span></div>
+                <div class="counter c1"><b>1</b><em></em><i>5</i></div>
+                <div class="ctitle">콜라주 다꾸 과정</div>
+                <div class="t2rx"><div data-z="Yeeun 반응 버튼" class="react" style="top:243px">💕 하트</div></div>
+              </div>
+              <div data-z="Yeeun 게시물 2장" class="card main t2c t2gray" data-i="1"><div class="counter c1"><b>2</b><em></em><i>5</i></div></div>
+              <div data-z="Yeeun 게시물 3장" class="card main t2c t2gray" data-i="2"><div class="counter c1"><b>3</b><em></em><i>5</i></div></div>
+              <div data-z="Yeeun 게시물 4장" class="card main t2c t2gray" data-i="3"><div class="counter c1"><b>4</b><em></em><i>5</i></div></div>
+              <div data-z="Yeeun 게시물 5장" class="card main t2c t2gray" data-i="4"><div class="counter c1"><b>5</b><em></em><i>5</i></div></div>
+            </div>
+            <div class="t2fx" aria-hidden="true"></div>
+            <div class="t2rbar" role="group" aria-label="간편 반응" hidden style="top:166px"><div class="t2rrow"><button type="button" class="t2rchip" data-e="💕" data-l="하트">💕 하트</button><button type="button" class="t2rchip" data-e="💪" data-l="공감">💪 공감</button><button type="button" class="t2rchip" data-e="👀" data-l="궁금">👀 궁금</button><button type="button" class="t2rchip" data-e="😆" data-l="웃김">😆 웃김</button><button type="button" class="t2rchip" data-e="😫" data-l="으악">😫 으악</button><button type="button" class="t2rchip" data-e="🤤" data-l="동의">🤤 동의</button><button type="button" class="t2rchip" data-e="👏" data-l="응원">👏 응원</button></div></div>
+            <div data-z="Yeeun 게시물 글" class="a t13 nw t2fold" style="left:25px;top:293.86px;overflow:hidden;text-overflow:ellipsis;width:296px">잡지 오려서 콜라주 다꾸 해봤는데 시간 가는 줄 몰랐어요 과정 사진 차례대로 올려요 #콜라주다꾸 #다꾸기록</div>
+            <div data-z="더 보기" role="button" tabindex="0" class="a more cy nw t2fold t2more" style="left:326px;top:302.86px;cursor:pointer">더 보기</div>
+            <div class="a n14 nw t2fold t2pname" hidden style="left:25px;top:312.86px"></div>
+            <div class="a t13 nw t2fold t2ptext" hidden style="left:76px;top:314.86px;max-width:289px;overflow:hidden;text-overflow:ellipsis"></div>
+            <div class="a ago nw t2fold t2ago" style="left:25px;top:312.86px">20분 전</div>
+            <div class="a t2open" hidden style="left:0;top:298.86px;width:390px">
+              <div class="t13" data-z="게시물 글 (펼침)" style="padding:0 25px;word-break:keep-all">잡지 오려서 콜라주 다꾸 해봤는데 시간 가는 줄 몰랐어요 과정 사진 차례대로 올려요 #콜라주다꾸 #다꾸기록</div>
+              <div class="ago" style="padding:4px 25px 12px">20분 전</div>
+              <div class="cbar" data-z="댓글 바">
+                <div class="a" style="left:17px;top:0;width:357px;height:1px;background:#D6D6D6"></div>
+                <button type="button" class="a t2cbtn" style="left:13px;top:9px;height:32px;padding:0 6px;border-radius:8px;display:flex;align-items:center;gap:6px" aria-label="댓글 쓰기">
+                  <svg width="17" height="17" style="overflow:visible" aria-hidden="true"><use href="#i-comment"/></svg>
+                  <span class="t2ccount" style="font-weight:600;font-size:14px;line-height:1.5;letter-spacing:-0.35px;color:#000">0</span>
+                </button>
+                <button type="button" class="a t2foldbtn" style="left:338px;top:1px;width:48px;height:48px;display:flex;align-items:center;justify-content:center" aria-label="접기"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 15.5L12 8.5L19 15.5" stroke="#121212" fill="none"/></svg></button>
+              </div>
+              <div class="t2comments" data-z="댓글 목록" style="display:flex;flex-direction:column;gap:16px;padding:8px 0 4px">
+              </div>
+            </div>
+          </div>
+
+          </div>
+          </div>
+        </div>
+      </div>
+      </div></div>
+      <!-- fixed layers -->
+      <div data-z="상태바" class="statusbar" style="height:44px">
+        <div class="a" style="left:18px;top:12px;width:54px;text-align:center;font-family:var(--sys);font-weight:600;font-size:15px;line-height:20px;letter-spacing:-0.5px;color:#111">9:41</div>
+        <svg class="a" width="66.656" height="11.337" style="right:17.67px;top:16.33px" aria-hidden="true"><use href="#i-status"/></svg>
+      </div>
+      <div data-z="+ 버튼" class="fab" style="left:305px;bottom:129px"><svg class="a" width="29" height="29" style="left:16px;top:15px" aria-hidden="true"><use href="#i-plus"/></svg></div>
+      <div class="nav" data-z="하단 메뉴">
+        <div class="glass"></div>
+        <div class="on"></div>
+        <div class="row">
+          <div data-z="홈 탭" class="item cur"><svg width="34" height="34" aria-hidden="true"><use href="#i-home"/></svg>홈</div>
+          <div data-z="채팅 탭" class="item"><svg width="34" height="34" aria-hidden="true"><use href="#i-chat"/></svg>채팅</div>
+          <button type="button" data-z="검색 탭" class="item"><svg width="34" height="34" aria-hidden="true"><use href="#i-search34"/></svg>검색</button>
+          <div data-z="프로필 탭" class="item"><svg width="34" height="34" aria-hidden="true"><use href="#i-profile"/></svg>프로필</div>
+        </div>
+      </div>
+      <div class="indicator"></div>
+      <div class="t2hole" id="t2-hole" aria-hidden="true"></div>
+      <div class="t2marks" id="t2-marks" aria-hidden="true"></div>
+    </div>
+    <button class="pill" type="button" id="t2-done"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span id="t2-done-label">확인 완료</span></button>
+    <div class="t2cdim" id="t2-cdim" hidden></div>
+    <div class="composer t2composer" id="t2-composer" hidden>
+      <div class="emojis"><button type="button" class="emo" aria-label="❤️">❤️</button><button type="button" class="emo" aria-label="🙌">🙌</button><button type="button" class="emo" aria-label="🔥">🔥</button><button type="button" class="emo" aria-label="👏">👏</button><button type="button" class="emo" aria-label="😢">😢</button><button type="button" class="emo" aria-label="😍">😍</button><button type="button" class="emo" aria-label="😮">😮</button><button type="button" class="emo" aria-label="😂">😂</button></div>
+      <div class="row">
+        <div class="me"><svg width="22" height="22" aria-hidden="true"><use href="#i-person"/></svg></div>
+        <div class="cfield">
+          <input id="t2-cinput" type="text" maxlength="200" autocomplete="off" enterkeyhint="send" placeholder="Clare 님에게 댓글 달기..." aria-label="댓글 입력">
+          <button type="button" id="t2-csend" class="csend" disabled aria-label="보내기"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5.5 11.5L12 5l6.5 6.5" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+      </div>
+    </div>
+    <div class="t2sheet" id="t2-sheet" role="dialog" aria-modal="false" aria-labelledby="t2-q"></div>
+  </section>
+
+  <section class="screen modal" id="s-finish" aria-label="미션 완료">
+    <div class="finish-dim"></div>
+    <div class="finish" role="dialog" aria-label="미션 완료">
+      <p class="ft">미션 완료!</p>
+      <p class="fs">아래 버튼을 눌러 결과를 제출해 주세요.</p>
+      <a class="cta" id="t-submit" href="#" target="_blank" rel="noopener">제출하기</a>
+    </div>
+  </section>
+
+  <section class="screen scroll" id="s-end"></section>
+  <section class="screen scroll" id="s-done"></section>
+
+  <button class="pill" type="button" id="mission-pill" hidden>
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 21V4"></path><path d="M5 4h12l-2.5 4.5L17 13H5"></path></svg>
+    미션 보기
+  </button>
+  <div class="msdim" id="ms-dim" hidden></div>
+  <div class="msheet" id="ms-sheet" role="dialog" aria-modal="true" aria-label="미션" hidden><div class="grab"></div><div id="ms-body" style="display:flex;flex-direction:column;gap:20px"></div><button type="button" class="cta" id="ms-close">닫기</button></div>
+</div>
+
+
+<script src="js/app.js"></script>
+</body>
+</html>
