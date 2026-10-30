@@ -477,8 +477,18 @@
     if (e.target !== e.currentTarget) return;
     e.stopImmediatePropagation(); try { cinput.blur(); } catch (err) {} ev('댓글창 닫음'); go('postopen');
   });
+  // iOS: 키보드가 열려 있는 동안 페이지 높이를 키보드 위 영역에 맞춤.
+  // 페이지가 위아래로 밀리지 않아 입력창이 키보드 바로 위에 붙어 있고, 피드는 그 위에서 스크롤됨
+  function kbFit() {
+    var vv = window.visualViewport; if (!vv) return;
+    var open = state.current === 'compose' || !document.getElementById('t2-composer').hidden;
+    var kb = open && window.innerHeight - vv.height > 80;
+    document.documentElement.style.height = document.body.style.height = kb ? vv.height + 'px' : '';
+    if (kb && (window.scrollY || vv.offsetTop)) window.scrollTo(0, 0);
+  }
   // iOS처럼 키보드가 화면을 덮는 경우 입력창을 키보드 위로 올림
   function liftComposer() {
+    kbFit();
     var vv = window.visualViewport;
     if (!vv || state.current !== 'compose') { composer.style.bottom = '0px'; return; }
     var r = stage.getBoundingClientRect();
@@ -861,14 +871,19 @@
       sync();
     }
     function lift() {
+      kbFit();
       var vv = window.visualViewport;
       if (!vv || comp.hidden) { comp.style.bottom = '0px'; return; }
       var r = stage.getBoundingClientRect(); comp.style.bottom = Math.max(0, r.bottom - (vv.offsetTop + vv.height)) + 'px';
     }
-    function openC(P) { if (t2Busy()) return; if (A !== P) input.value = ''; A = P; fitInput(); comp.hidden = false; dim.hidden = false; ev(P.label + ' 댓글 쓰기 열기'); setTimeout(function () { try { input.focus(); } catch (e) {} }, 50); }
+    function openC(P) { if (t2Busy()) return; if (A !== P) input.value = ''; A = P; fitInput(); comp.hidden = false; dim.hidden = false; ev(P.label + ' 댓글 쓰기 열기'); try { input.focus(); } catch (e) {} } // iOS는 탭과 같은 순간에 focus해야 키보드가 뜸
     function closeC() { comp.hidden = true; dim.hidden = true; try { input.blur(); } catch (e) {} lift(); }
     T2POSTS.forEach(function (P) { P.cbtn.addEventListener('click', function (e) { e.stopPropagation(); openC(P); }); });
-    dim.addEventListener('click', closeC);
+    // 댓글 쓰는 중에도 피드는 스크롤되고(dim은 터치를 통과시킴), 입력창 바깥을 탭하면 닫힘
+    stage.addEventListener('click', function (e) {
+      if (comp.hidden || comp.contains(e.target)) return;
+      e.preventDefault(); e.stopPropagation(); closeC();
+    }, true);
     comp.querySelectorAll('.emo').forEach(function (b) { b.addEventListener('click', function () { input.value += b.textContent; sync(); try { input.focus(); } catch (e) {} }); });
     input.addEventListener('input', sync);
     input.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); post(); } });

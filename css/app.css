@@ -221,7 +221,7 @@ button.item { cursor: pointer; }
 .t2fx span { position: absolute; font-size: 26px; line-height: 1; animation: t2float 1.4s ease-out forwards; }
 @keyframes t2float { 0% { opacity: 0; transform: translate(0,0) scale(.6); } 15% { opacity: 1; transform: translate(0,-14px) scale(1.05); } 100% { opacity: 0; transform: translate(var(--dx,0px), -150px) scale(.9) rotate(var(--rot,0deg)); } }
 .quiz .t2rbar { display: none; }
-.t2cdim { position: absolute; inset: 0; z-index: 11; }
+.t2cdim { position: absolute; inset: 0; z-index: 11; pointer-events: none; }
 #t2-comments, .t2comments { scrollbar-width: none; }
 #t2-comments::-webkit-scrollbar, .t2comments::-webkit-scrollbar { display: none; }
 .t2composer { z-index: 12; }
