@@ -879,10 +879,11 @@
     function openC(P) { if (t2Busy()) return; if (A !== P) input.value = ''; A = P; fitInput(); comp.hidden = false; dim.hidden = false; ev(P.label + ' 댓글 쓰기 열기'); try { input.focus(); } catch (e) {} } // iOS는 탭과 같은 순간에 focus해야 키보드가 뜸
     function closeC() { comp.hidden = true; dim.hidden = true; try { input.blur(); } catch (e) {} lift(); }
     T2POSTS.forEach(function (P) { P.cbtn.addEventListener('click', function (e) { e.stopPropagation(); openC(P); }); });
-    // 댓글 쓰는 중에도 피드는 스크롤되고(dim은 터치를 통과시킴), 입력창 바깥을 탭하면 닫힘
+    // 댓글 쓰는 중에도 피드는 스크롤되고(dim은 터치를 통과시킴), 입력창 바깥을 탭하면
+    // 누른 기능은 그대로 실행되고 입력창만 닫힘 (쓰던 글은 남겨 둠)
     stage.addEventListener('click', function (e) {
       if (comp.hidden || comp.contains(e.target)) return;
-      e.preventDefault(); e.stopPropagation(); closeC();
+      closeC();
     }, true);
     comp.querySelectorAll('.emo').forEach(function (b) { b.addEventListener('click', function () { input.value += b.textContent; sync(); try { input.focus(); } catch (e) {} }); });
     input.addEventListener('input', sync);
