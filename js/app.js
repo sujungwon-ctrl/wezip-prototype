@@ -90,7 +90,7 @@
     return { current: 'q1', startedAt: null, t0: null, ev: [], chipChanges: 0, anonToggles: 0, answers: { q1: null, q2: [], q3: null, q4: '', q5: null }, log: {}, later: 0, dimClose: 0, views: 0,
       task: 'm1', returnTo: null, chip: 0, anon: true, sentChip: null, sentAnon: null, finishedAt: null,
       phase: 1, chip2: 0, anon2: true, chipChanges2: 0, anonToggles2: 0, later2: 0, dimClose2: 0, sentChip2: null, sentAnon2: null,
-      firstPick: null, done2: null, comment2: '', commentPost: '', finishBase: null, zcar: { p1: 1, p2: 1 }, r1Base: null, k1: { ms: 0, hintAt: null }, h1: { swipeMax: 1, opened: false, cTry: 0 },
+      firstPick: null, done2: null, comment2: '', finishBase: null, zcar: { p1: 1, p2: 1 }, r1Base: null, k1: { ms: 0, hintAt: null }, h1: { swipeMax: 1, opened: false, cTry: 0 },
       t2: { group: null, shownAt: null, viewMs: null, first: null, taps: [], scrollMax: 0, scrollAt: 0, step: 0, answers: [], qms: [], qAt: null } };
   }
   function el(name) { return document.getElementById('s-' + name); }
@@ -253,7 +253,7 @@
     if (state.sentChip2 != null || state.chipChanges2 || state.later2 || state.dimClose2 || state.anonToggles2)
       L.push('[2차 메세지] ' + (state.sentChip2 == null ? '보내지 않음' : CHIPS[state.sentChip2]) + ' · 익명 ' + (state.sentAnon2 == null ? '-' : (state.sentAnon2 ? '켜짐' : '꺼짐')) +
         ' · 칩 변경 ' + state.chipChanges2 + '회 · 토글 ' + state.anonToggles2 + '회 · 나중에 ' + state.later2 + '회 · 바깥 닫기 ' + state.dimClose2 + '회');
-    if (state.comment2) L.push('[2차 댓글] ' + (state.commentPost === '중앙공원 한바퀴' ? '(중앙공원 한바퀴) ' : '') + state.comment2);
+    if (state.comment2) L.push('[2차 댓글] ' + state.comment2);
     var zc = state.zcar || {};
     L.push('[2차 John 게시물] 굳세어라 산책day ' + (zc.p1 || 1) + '/3장 · 중앙공원 한바퀴 ' + (zc.p2 || 1) + '/2장까지 봄');
     L.push('[2차 단계] ' + (R2.filter(function (k) { return state.log[k]; }).map(function (k) {
@@ -436,18 +436,7 @@
   var cinput = document.getElementById('cinput'), csend = document.getElementById('t-csend');
   var composer = document.getElementById('composer'), commentsEl = document.getElementById('comments');
   var commentsHTML = commentsEl.innerHTML;
-  // 미션 3: '굳세어라 산책day'(1)와 '중앙공원 한바퀴'(2) 어느 게시물에든 댓글을 쓸 수 있고, 입력창은 하나를 같이 씀
-  var cTarget = 1;
-  function openCompose(n) {
-    if (cTarget !== n) { cinput.value = ''; syncSend(); }
-    cTarget = n; go('compose'); try { cinput.focus(); } catch (err) {}
-    scrollToCar(document.getElementById(n === 2 ? 'po-car2' : 'po-car1'), document.getElementById('postopen-scroll'));
-  }
-  on('t-comment', function () { openCompose(1); });
-  on('t-comment2', function () { ev('중앙공원 한바퀴 댓글 쓰기'); openCompose(2); });
-  // 게시글 화면에서도 바로 댓글: 펼친 화면으로 넘어가면서 그 게시물의 댓글창이 열림
-  on('t-pcomment1', function () { ev('게시글 화면에서 댓글 쓰기 (굳세어라 산책day)'); openCompose(1); });
-  on('t-pcomment2', function () { ev('게시글 화면에서 댓글 쓰기 (중앙공원 한바퀴)'); openCompose(2); });
+  on('t-comment', function () { go('compose'); try { cinput.focus(); } catch (err) {} });
   function syncSend() { csend.disabled = !cinput.value.trim(); }
   cinput.addEventListener('input', syncSend);
   cinput.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); sendComment(); } });
@@ -466,37 +455,30 @@
   function sendComment() {
     var text = cinput.value.trim();
     if (!text || state.current !== 'compose') return;
-    var two = cTarget === 2, list = two ? document.getElementById('comments2') : commentsEl;
-    state.comment2 = text; state.commentPost = two ? '중앙공원 한바퀴' : '굳세어라 산책day'; state.done2 = '댓글'; ev(two ? '댓글 보냄 (중앙공원 한바퀴)' : '댓글 보냄');
+    state.comment2 = text; state.done2 = '댓글'; ev('댓글 보냄');
     var row = node('div', 'cmt new'); row.setAttribute('data-z', '댓글');
     var av = node('div', 'av me'); av.innerHTML = '<svg width="22" height="22" aria-hidden="true"><use href="#i-person"/></svg>';
     var body = node('div', 'body'), head = node('div', 'head');
     head.appendChild(node('span', 'cm-name', 'wezip_tester')); head.appendChild(node('span', 'cm-ago', '방금'));
     body.appendChild(head); body.appendChild(node('div', 'text', text));
     row.appendChild(av); row.appendChild(body);
-    if (two) { var c2 = document.getElementById('ccount2'); c2.hidden = false; c2.textContent = '1'; }
-    else { setFold(true); document.getElementById('ccount').textContent = '24'; }
-    list.insertBefore(row, list.firstChild);
+    setFold(true);
+    commentsEl.insertBefore(row, commentsEl.firstChild);
+    document.getElementById('ccount').textContent = '24';
     cinput.value = ''; syncSend(); try { cinput.blur(); } catch (err) {}
     var sc = document.getElementById('postopen-scroll');
     go('postopen');
-    sc.scrollTop = Math.max(0, list.offsetTop - 160);
+    sc.scrollTop = Math.max(0, commentsEl.offsetTop - 160);
     state.finishBase = 'postopen';
     setTimeout(function () { if (state.current === 'postopen') { ev('미션 완료'); go('q5'); } }, 900);
   }
   // 댓글 쓰는 중에도 뒤의 게시글은 스크롤되고, 입력창 바깥을 누르면 닫힘.
   // 버튼을 누른 경우엔 닫힌 뒤 그 기능도 그대로 실행 (빈 곳은 예전처럼 닫기만 해서 오탭 기록에 안 잡힘)
   stage.addEventListener('click', function (e) {
-    if (state.current !== 'compose' || composer.contains(e.target) || e.target.closest('.t2car')) return; // 사진 넘기기·탭은 닫지 않음
+    if (state.current !== 'compose' || composer.contains(e.target)) return;
     try { cinput.blur(); } catch (err) {} ev('댓글창 닫음'); go('postopen');
     if (!e.target.closest('button, a, input, textarea')) e.stopImmediatePropagation();
   }, true);
-  // 댓글창을 열 때 그 게시물 사진이 위(상태바 아래)로 오게 스크롤 → 키보드가 올라와도 사진을 보며 넘길 수 있음
-  function scrollToCar(car, scroller) {
-    var s = parseFloat(getComputedStyle(stage).getPropertyValue('--s')) || 1;
-    var d = car.getBoundingClientRect().top - scroller.getBoundingClientRect().top - 52 * s;
-    scroller.scrollTo({ top: Math.max(0, scroller.scrollTop + d), behavior: 'smooth' });
-  }
   // iOS: 키보드가 열려 있는 동안 페이지 높이를 키보드 위 영역에 맞춤.
   // 페이지가 위아래로 밀리지 않아 입력창이 키보드 바로 위에 붙어 있고, 피드는 그 위에서 스크롤됨
   function kbFit() {
@@ -509,8 +491,6 @@
   // iOS처럼 키보드가 화면을 덮는 경우 입력창을 키보드 위로 올림
   function liftComposer() {
     kbFit();
-    // 댓글 쓰는 동안만 아래 여백을 늘려, 맨 아래 게시물(중앙공원 한바퀴)도 사진이 위로 올라오게 함
-    document.getElementById('postopen-scroll').firstElementChild.style.paddingBottom = state.current === 'compose' ? '640px' : '';
     var vv = window.visualViewport;
     if (!vv || state.current !== 'compose') { composer.style.bottom = '0px'; return; }
     var r = stage.getBoundingClientRect();
@@ -779,7 +759,7 @@
     place(true);
   }
   T2POSTS.forEach(function (P) {
-    makeCar(P, { scroll: t2scroll, busy: function () { return t2sec.classList.contains('quiz'); },
+    makeCar(P, { scroll: t2scroll, busy: function () { return t2sec.classList.contains('quiz') || !document.getElementById('t2-composer').hidden; }, // 댓글 쓰는 중엔 사진 넘기기 잠금
       onGo: function (cur, N) { var S = t2S(P); S.swipeMax = Math.max(S.swipeMax || 1, cur + 1); ev(P.label + ' 게시물 넘김 ' + (cur + 1) + '/' + N); } });
   });
   window.t2CarReset = function () { T2POSTS.forEach(function (P) { P.carReset(); }); };
@@ -837,7 +817,7 @@
     function Z() { return state.zcar = state.zcar || { p1: 1, p2: 1 }; }
     [[A, 'p1', '굳세어라 산책day', B], [B, 'p1', '굳세어라 산책day', A], [C, 'p2', '중앙공원 한바퀴', D], [D, 'p2', '중앙공원 한바퀴', C]].forEach(function (o) {
       var P = o[0];
-      makeCar(P, { scroll: P.scroll, busy: function () { return state.current !== P.screen && !(P.screen === 'postopen' && state.current === 'compose'); },
+      makeCar(P, { scroll: P.scroll, busy: function () { return state.current !== P.screen; },
         onGo: function (cur, N) { var z = Z(); z[o[1]] = Math.max(z[o[1]] || 1, cur + 1); ev('John ' + o[2] + ' 넘김 ' + (cur + 1) + '/' + N); if (o[3]) o[3].jump(cur); } });
     });
     window.zCarReset = function () { [A, B, C, D].forEach(function (P) { P.carReset(); }); };
@@ -859,7 +839,7 @@
 
   // ── 댓글 쓰기 (탐색 화면 전용, 미션 진행과는 무관). 입력창은 하나를 같이 쓰고, 연 게시물에 댓글이 달림
   (function () {
-    var comp = document.getElementById('t2-composer'), dim = document.getElementById('t2-cdim'), t2page = document.getElementById('t2-page');
+    var comp = document.getElementById('t2-composer'), dim = document.getElementById('t2-cdim');
     var input = document.getElementById('t2-cinput'), send = document.getElementById('t2-csend');
     var MAX = 10, SHOW = 6, A = null;
     // 접힌 상태의 미리보기 댓글 한 줄도 가장 최근 댓글로 바꿈 (댓글이 없던 게시물은 한 줄이 새로 생기고 아래가 밀림)
@@ -898,13 +878,13 @@
       if (!vv || comp.hidden) { comp.style.bottom = '0px'; return; }
       var r = stage.getBoundingClientRect(); comp.style.bottom = Math.max(0, r.bottom - (vv.offsetTop + vv.height)) + 'px';
     }
-    function openC(P) { if (t2Busy()) return; if (A !== P) input.value = ''; A = P; fitInput(); comp.hidden = false; dim.hidden = false; ev(P.label + ' 댓글 쓰기 열기'); try { input.focus(); } catch (e) {} t2page.style.paddingBottom = '640px'; scrollToCar(P.car, t2scroll); } // 아래 여백: 맨 아래 게시물도 사진이 위로 올라오게 // iOS는 탭과 같은 순간에 focus해야 키보드가 뜸
-    function closeC() { comp.hidden = true; dim.hidden = true; t2page.style.paddingBottom = ''; try { input.blur(); } catch (e) {} lift(); }
+    function openC(P) { if (t2Busy()) return; if (A !== P) input.value = ''; A = P; fitInput(); comp.hidden = false; dim.hidden = false; ev(P.label + ' 댓글 쓰기 열기'); try { input.focus(); } catch (e) {} } // iOS는 탭과 같은 순간에 focus해야 키보드가 뜸
+    function closeC() { comp.hidden = true; dim.hidden = true; try { input.blur(); } catch (e) {} lift(); }
     T2POSTS.forEach(function (P) { P.cbtn.addEventListener('click', function (e) { e.stopPropagation(); openC(P); }); });
     // 댓글 쓰는 중에도 피드는 스크롤되고(dim은 터치를 통과시킴), 입력창 바깥을 탭하면
     // 누른 기능은 그대로 실행되고 입력창만 닫힘 (쓰던 글은 남겨 둠)
     stage.addEventListener('click', function (e) {
-      if (comp.hidden || comp.contains(e.target) || e.target.closest('.t2car')) return; // 사진 넘기기·탭은 닫지 않음
+      if (comp.hidden || comp.contains(e.target)) return;
       closeC();
     }, true);
     comp.querySelectorAll('.emo').forEach(function (b) { b.addEventListener('click', function () { input.value += b.textContent; sync(); try { input.focus(); } catch (e) {} }); });
@@ -1298,7 +1278,6 @@
     syncChips(); syncAnon(); syncZ();
     document.getElementById('recent').hidden = true;
     commentsEl.innerHTML = commentsHTML; setFold(true);
-    document.getElementById('comments2').textContent = ''; document.getElementById('ccount2').hidden = true; cTarget = 1;
     document.getElementById('t-ztopic').classList.remove('sel'); document.getElementById('t-ztopic').setAttribute('aria-pressed', 'false'); document.getElementById('ccount').textContent = '23'; cinput.value = ''; syncSend();
     ['zprofile-scroll', 'post-scroll', 'postopen-scroll'].forEach(function (id) { document.getElementById(id).scrollTop = 0; });
     document.getElementById('home-scroll').scrollTop = 0;
