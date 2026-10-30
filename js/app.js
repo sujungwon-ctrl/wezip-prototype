@@ -445,6 +445,9 @@
   }
   on('t-comment', function () { openCompose(1); });
   on('t-comment2', function () { ev('중앙공원 한바퀴 댓글 쓰기'); openCompose(2); });
+  // 게시글 화면에서도 바로 댓글: 펼친 화면으로 넘어가면서 그 게시물의 댓글창이 열림
+  on('t-pcomment1', function () { ev('게시글 화면에서 댓글 쓰기 (굳세어라 산책day)'); openCompose(1); });
+  on('t-pcomment2', function () { ev('게시글 화면에서 댓글 쓰기 (중앙공원 한바퀴)'); openCompose(2); });
   function syncSend() { csend.disabled = !cinput.value.trim(); }
   cinput.addEventListener('input', syncSend);
   cinput.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); sendComment(); } });
