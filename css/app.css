@@ -42,6 +42,8 @@ body {
 .screen { position: absolute; inset: 0; overflow: hidden; visibility: hidden; background: var(--app-bg); }
 .screen.on { visibility: visible; }
 .screen.modal { background: transparent; z-index: 3; }
+#s-compose { pointer-events: none; } /* 댓글 쓰는 중에도 뒤 게시글 스크롤/탭이 통과 */
+#s-compose .composer { pointer-events: auto; }
 .scroll { overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; touch-action: pan-y; scrollbar-width: none; }
 .scroll::-webkit-scrollbar { display: none; }
 

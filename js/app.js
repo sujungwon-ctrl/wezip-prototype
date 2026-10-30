@@ -472,11 +472,13 @@
     state.finishBase = 'postopen';
     setTimeout(function () { if (state.current === 'postopen') { ev('미션 완료'); go('q5'); } }, 900);
   }
-  // 댓글 창 바깥을 누르면 닫힘
-  el('compose').addEventListener('click', function (e) {
-    if (e.target !== e.currentTarget) return;
-    e.stopImmediatePropagation(); try { cinput.blur(); } catch (err) {} ev('댓글창 닫음'); go('postopen');
-  });
+  // 댓글 쓰는 중에도 뒤의 게시글은 스크롤되고, 입력창 바깥을 누르면 닫힘.
+  // 버튼을 누른 경우엔 닫힌 뒤 그 기능도 그대로 실행 (빈 곳은 예전처럼 닫기만 해서 오탭 기록에 안 잡힘)
+  stage.addEventListener('click', function (e) {
+    if (state.current !== 'compose' || composer.contains(e.target)) return;
+    try { cinput.blur(); } catch (err) {} ev('댓글창 닫음'); go('postopen');
+    if (!e.target.closest('button, a, input, textarea')) e.stopImmediatePropagation();
+  }, true);
   // iOS: 키보드가 열려 있는 동안 페이지 높이를 키보드 위 영역에 맞춤.
   // 페이지가 위아래로 밀리지 않아 입력창이 키보드 바로 위에 붙어 있고, 피드는 그 위에서 스크롤됨
   function kbFit() {
@@ -1233,7 +1235,7 @@
     ORDER.forEach(function (n) {
       var visible = n === name || n === base;
       el(n).classList.toggle('on', visible);
-      el(n).inert = n !== name;
+      el(n).inert = n !== name && !(name === 'compose' && n === base); // 댓글 쓰는 중에도 뒤 게시글은 조작 가능
     });
     var prevScreen = state.current;
     msClose();
